@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ros Döner Kebab · Kebab, Pizza y Tacos en Patraix, València</title>
+<meta name="description" content="Ros Döner Kebab en Patraix, València: kebab, dürüm, pizzas y menús combinados desde 7€. Abierto todos los días de 12:00 a 00:00. Pide por teléfono o WhatsApp.">
+<meta name="theme-color" content="#1B1411">
+<meta property="og:title" content="Ros Döner Kebab — Patraix, València">
+<meta property="og:description" content="Kebab, dürüm, pizzas y menús combinados desde 7€. Abierto todos los días de 12:00 a 00:00.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%94%A5%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Work+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --char:#1B1411;
+    --char2:#251A16;
+    --char3:#2E2019;
+    --red:#D62839;
+    --orange:#F4762B;
+    --gold:#F7B733;
+    --cream:#F6EEE0;
+    --smoke:#B9A99C;
+    --line:rgba(246,238,224,.12);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--char);
+    color:var(--cream);
+    font-family:'Work Sans',sans-serif;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.display{
+    font-family:'Anton',sans-serif;
+    font-weight:400;
+    text-transform:uppercase;
+    letter-spacing:.01em;
+    line-height:.95;
+  }
+  a{color:inherit;text-decoration:none;}
+  ul{list-style:none;}
+  img{max-width:100%;display:block;}
+  :focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 1.5rem;}
+  .eyebrow{
+    font-size:.78rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--gold);
+  }
+  @media(prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;}}
+
+  /* ---------- Header ---------- */
+  header{
+    position:sticky;top:0;z-index:50;
+    background:rgba(27,20,17,.9);backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav{display:flex;align-items:center;justify-content:space-between;padding:.85rem 1.5rem;max-width:1180px;margin:0 auto;gap:1rem;}
+  .brand{display:flex;align-items:center;gap:.6rem;font-family:'Anton',sans-serif;font-size:1.15rem;letter-spacing:.02em;white-space:nowrap;}
+  .brand svg{flex:none;}
+  .navlinks{display:flex;gap:1.6rem;font-size:.92rem;font-weight:600;}
+  .navlinks a{opacity:.85;transition:opacity .15s;}
+  .navlinks a:hover{opacity:1;color:var(--gold);}
+  .status-pill{
+    display:inline-flex;align-items:center;gap:.4rem;
+    font-size:.78rem;font-weight:700;letter-spacing:.03em;
+    padding:.32rem .7rem;border-radius:99px;border:1px solid var(--line);
+    white-space:nowrap;
+  }
+  .status-pill .dot{width:7px;height:7px;border-radius:50%;background:#5BD86A;box-shadow:0 0 8px #5BD86A;}
+  .status-pill.closed .dot{background:#8A7B70;box-shadow:none;}
+  .navcta{display:flex;align-items:center;gap:.6rem;}
+  .btn-icon{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:38px;height:38px;border-radius:50%;
+    background:var(--char3);border:1px solid var(--line);transition:transform .15s,background .15s;
+  }
+  .btn-icon:hover{background:var(--red);transform:translateY(-2px);}
+  .navlinks-mobile-toggle{display:none;background:none;border:none;color:var(--cream);}
+  @media(max-width:820px){
+    .navlinks{display:none;}
+  }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    position:relative;overflow:hidden;
+    padding:5.5rem 0 4rem;
+    background:
+      radial-gradient(ellipse 60% 50% at 26% 18%,rgba(244,118,43,.38),transparent 60%),
+      radial-gradient(ellipse 55% 45% at 82% 78%,rgba(214,40,57,.30),transparent 55%),
+      var(--char);
+  }
+  .hero::before{
+    content:'';position:absolute;inset:0;pointer-events:none;
+    background:radial-gradient(circle at 50% 115%,rgba(247,183,51,.28),transparent 50%);
+    animation:emberPulse 6s ease-in-out infinite;
+  }
+  @keyframes emberPulse{0%,100%{opacity:.55;}50%{opacity:1;}}
+  .hero-inner{position:relative;z-index:1;max-width:820px;}
+  .hero h1{font-size:clamp(2.7rem,9vw,5.4rem);color:var(--cream);}
+  .hero h1 span{color:var(--gold);}
+  .hero-sub{
+    font-family:'Anton',sans-serif;text-transform:uppercase;letter-spacing:.06em;
+    font-size:clamp(1.1rem,3vw,1.5rem);color:var(--orange);margin-top:.6rem;
+  }
+  .hero-line{max-width:46ch;color:var(--smoke);font-size:1.05rem;margin-top:1.1rem;}
+  .hero-meta{display:flex;flex-wrap:wrap;gap:.8rem 1.6rem;margin-top:1.4rem;font-size:.92rem;color:var(--smoke);}
+  .hero-meta strong{color:var(--cream);}
+  .hero-ctas{display:flex;flex-wrap:wrap;gap:.9rem;margin-top:2rem;}
+  .btn{
+    display:inline-flex;align-items:center;gap:.55rem;
+    font-weight:700;font-size:.98rem;
+    padding:.9rem 1.5rem;border-radius:10px;border:1px solid transparent;
+    transition:transform .15s ease,box-shadow .15s ease;
+  }
+  .btn svg{flex:none;}
+  .btn:hover{transform:translateY(-2px);}
+  .btn-primary{background:linear-gradient(135deg,var(--red),var(--orange));color:var(--cream);box-shadow:0 8px 24px -8px rgba(214,40,57,.6);}
+  .btn-ghost{background:transparent;border-color:var(--line);color:var(--cream);}
+  .btn-ghost:hover{border-color:var(--gold);}
+
+  /* ---------- USP strip ---------- */
+  .usp{padding:3rem 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--char2);}
+  .usp-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;}
+  @media(max-width:900px){.usp-grid{grid-template-columns:repeat(2,1fr);}}
+  @media(max-width:520px){.usp-grid{grid-template-columns:1fr;}}
+  .usp-card{display:flex;gap:.9rem;align-items:flex-start;}
+  .usp-card svg{flex:none;color:var(--gold);margin-top:.15rem;}
+  .usp-card h3{font-family:'Work Sans',sans-serif;font-weight:700;text-transform:none;font-size:1rem;color:var(--cream);}
+  .usp-card p{font-size:.88rem;color:var(--smoke);margin-top:.25rem;}
+
+  /* ---------- Section headers ---------- */
+  section{padding:4.5rem 0;}
+  .sec-head{max-width:640px;margin-bottom:2.5rem;}
+  .sec-head h2{font-size:clamp(2rem,5vw,2.9rem);color:var(--cream);margin-top:.4rem;}
+  .sec-head p{color:var(--smoke);margin-top:.6rem;font-size:1rem;}
+
+  /* ---------- Menu ---------- */
+  .menu-section{background:var(--char);}
+  .tabs{display:flex;gap:.6rem;overflow-x:auto;padding-bottom:.5rem;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+  .tabs::-webkit-scrollbar{display:none;}
+  .tab{
+    flex:none;font-weight:700;font-size:.88rem;
+    padding:.6rem 1.1rem;border-radius:99px;border:1px solid var(--line);
+    background:var(--char2);color:var(--smoke);white-space:nowrap;transition:all .15s;
+  }
+  .tab.active{background:var(--gold);color:var(--char);border-color:var(--gold);}
+  .tab:hover:not(.active){border-color:var(--orange);color:var(--cream);}
+  .allergen-note{font-size:.82rem;color:var(--smoke);font-style:italic;margin:1rem 0 1.8rem;}
+  .cat-note{
+    font-size:.9rem;color:var(--gold);font-weight:600;margin-bottom:1.2rem;
+    padding:.7rem 1rem;border:1px dashed var(--line);border-radius:10px;display:inline-block;
+  }
+  .group-title{
+    font-family:'Anton',sans-serif;font-size:1.3rem;color:var(--orange);
+    margin:1.6rem 0 .9rem;letter-spacing:.02em;
+  }
+  .group-title:first-child{margin-top:0;}
+  .menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:.85rem;}
+  @media(max-width:700px){.menu-grid{grid-template-columns:1fr;}}
+  .menu-card{
+    background:linear-gradient(155deg,var(--char3),var(--char2));
+    border:1px solid var(--line);border-radius:14px;
+    padding:1.1rem 1.25rem;
+    display:flex;justify-content:space-between;align-items:center;gap:1rem;
+  }
+  .menu-card .info h3{font-family:'Work Sans',sans-serif;font-weight:700;text-transform:none;font-size:1rem;color:var(--cream);}
+  .menu-card .info p{font-size:.84rem;color:var(--smoke);margin-top:.3rem;line-height:1.4;}
+  .price-group{display:flex;flex-direction:column;gap:.35rem;flex:none;}
+  .price-tag{
+    font-family:'Anton',sans-serif;font-size:.95rem;letter-spacing:.02em;
+    background:var(--gold);color:var(--char);
+    padding:.32rem .7rem .32rem .9rem;border-radius:5px;white-space:nowrap;
+    clip-path:polygon(9px 0,100% 0,100% 100%,9px 100%,0 50%);
+  }
+  .price-tag.alt{background:var(--cream);}
+  .price-tag .lbl{font-family:'Work Sans',sans-serif;font-weight:700;font-size:.68rem;opacity:.65;margin-right:.25rem;}
+  .price-note{font-size:.82rem;color:var(--smoke);font-style:italic;}
+  .order-link{
+    margin-top:.6rem;display:inline-flex;align-items:center;gap:.3rem;
+    font-size:.76rem;font-weight:700;color:var(--gold);
+  }
+  .order-link:hover{color:var(--orange);}
+
+  /* ---------- Location ---------- */
+  .location{background:var(--char2);border-top:1px solid var(--line);}
+  .loc-grid{display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;align-items:start;}
+  @media(max-width:860px){.loc-grid{grid-template-columns:1fr;}}
+  .loc-details p{color:var(--smoke);font-size:.95rem;margin-bottom:1rem;display:flex;gap:.7rem;align-items:flex-start;}
+  .loc-details strong{color:var(--cream);display:block;font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.15rem;}
+  .loc-details svg{flex:none;color:var(--gold);margin-top:.2rem;}
+  .hours-table{width:100%;border-collapse:collapse;margin-top:.5rem;font-size:.92rem;}
+  .hours-table td{padding:.4rem 0;color:var(--smoke);border-top:1px solid var(--line);}
+  .hours-table td:last-child{text-align:right;color:var(--cream);font-weight:600;}
+  .map-embed{border-radius:14px;overflow:hidden;border:1px solid var(--line);height:340px;}
+  .map-embed iframe{width:100%;height:100%;border:0;filter:grayscale(.2) contrast(1.05);}
+
+  /* ---------- Footer ---------- */
+  footer{padding:3rem 0 2.2rem;border-top:1px solid var(--line);}
+  .foot-grid{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:2rem;margin-bottom:2rem;}
+  @media(max-width:760px){.foot-grid{grid-template-columns:1fr;}}
+  .foot-grid h4{font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:.8rem;}
+  .foot-grid p,.foot-grid a{font-size:.9rem;color:var(--smoke);display:block;margin-bottom:.5rem;}
+  .foot-grid a:hover{color:var(--cream);}
+  .foot-bottom{border-top:1px solid var(--line);padding-top:1.4rem;display:flex;flex-wrap:wrap;justify-content:space-between;gap:.6rem;font-size:.8rem;color:var(--smoke);}
+
+  /* ---------- Floating WhatsApp ---------- */
+  .float-wa{
+    position:fixed;bottom:1.3rem;right:1.3rem;z-index:60;
+    width:56px;height:56px;border-radius:50%;
+    background:linear-gradient(135deg,var(--red),var(--orange));
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 10px 26px -6px rgba(214,40,57,.6);
+    transition:transform .15s;
+  }
+  .float-wa:hover{transform:scale(1.08);}
+
+  .reveal{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease;}
+  .reveal.in{opacity:1;transform:none;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav">
+    <div class="brand">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M12 2C9 6 7 8 7 12a5 5 0 0010 0c0-1.5-.5-2.5-1.3-3.6.1 1.4-.5 2.2-1.2 2.6.4-2-.2-4-2.5-9z" fill="#F7B733"/></svg>
+      ROS DÖNER KEBAB
+    </div>
+    <nav class="navlinks">
+      <a href="#menu">Carta</a>
+      <a href="#ubicacion">Ubicación</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+    <div class="navcta">
+      <span class="status-pill" id="statusPill"><span class="dot"></span><span id="statusText">Comprobando…</span></span>
+      <a class="btn-icon" href="tel:+34673035749" aria-label="Llamar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.13.96.36 1.9.68 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.9.32 1.85.55 2.81.68A2 2 0 0122 16.92z"/></svg>
+      </a>
+      <a class="btn-icon" id="navWa" href="#" target="_blank" rel="noopener" aria-label="WhatsApp">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 00-8.6 15L2 22l5.2-1.4A10 10 0 1012 2zm0 18a8 8 0 01-4.1-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8 8 0 1112 20zm4.4-5.9c-.2-.1-1.4-.7-1.7-.8-.2-.1-.4-.1-.6.1-.2.2-.6.8-.8 1-.1.2-.3.2-.5.1-.7-.3-1.4-.7-2-1.3-.5-.5-1-1.1-1.4-1.8-.1-.2 0-.4.1-.5l.4-.5c.1-.2.2-.3.2-.5.1-.2 0-.4 0-.5-.1-.1-.6-1.5-.8-2-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.2.2-1 1-1 2.3s1 2.7 1.1 2.9c.1.2 2 3 4.8 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.4-.6 1.6-1.1.2-.5.2-1 .1-1.1z"/></svg>
+      </a>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-inner">
+    <p class="eyebrow">Patraix · València</p>
+    <h1>ROS DÖNER<br><span>KEBAB</span></h1>
+    <p class="hero-sub">Tacos · Kebab · Pizzería</p>
+    <p class="hero-line">Döner cortado al momento, dürüm, pizzas al horno y menús combinados desde 7€. Para tomar aquí o para llevar, todos los días de la semana.</p>
+    <div class="hero-meta">
+      <span><strong>Horario</strong>12:00–16:00 y 18:00–00:00</span>
+      <span><strong>Dirección</strong>C/ Cermistras Ros, 4 · 46014 València</span>
+    </div>
+    <div class="hero-ctas">
+      <a class="btn btn-primary" href="tel:+34673035749">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.13.96.36 1.9.68 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.9.32 1.85.55 2.81.68A2 2 0 0122 16.92z"/></svg>
+        Llamar ahora
+      </a>
+      <a class="btn btn-ghost" id="heroWa" href="#" target="_blank" rel="noopener">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 00-8.6 15L2 22l5.2-1.4A10 10 0 1012 2zm0 18a8 8 0 01-4.1-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8 8 0 1112 20zm4.4-5.9c-.2-.1-1.4-.7-1.7-.8-.2-.1-.4-.1-.6.1-.2.2-.6.8-.8 1-.1.2-.3.2-.5.1-.7-.3-1.4-.7-2-1.3-.5-.5-1-1.1-1.4-1.8-.1-.2 0-.4.1-.5l.4-.5c.1-.2.2-.3.2-.5.1-.2 0-.4 0-.5-.1-.1-.6-1.5-.8-2-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.2.2-1 1-1 2.3s1 2.7 1.1 2.9c.1.2 2 3 4.8 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.4-.6 1.6-1.1.2-.5.2-1 .1-1.1z"/></svg>
+        Pedir por WhatsApp
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="usp">
+  <div class="wrap usp-grid">
+    <div class="usp-card">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 21V8a2 2 0 012-2h12a2 2 0 012 2v13M9 21v-6h6v6M4 12h16"/></svg>
+      <div><h3>12 menús combinados</h3><p>Kebab, dürüm, pizza o hamburguesa con patatas y bebida incluidas.</p></div>
+    </div>
+    <div class="usp-card">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 010 18"/></svg>
+      <div><h3>29 pizzas a elegir</h3><p>De la Margarita a la Barbacoa Tex, en normal, grande y familiar.</p></div>
+    </div>
+    <div class="usp-card">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+      <div><h3>Abierto hasta medianoche</h3><p>Servicio de mediodía y de noche, todos los días de la semana.</p></div>
+    </div>
+    <div class="usp-card">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12h13l-3-3m3 3l-3 3M16 6h2a2 2 0 012 2v8a2 2 0 01-2 2h-2"/></svg>
+      <div><h3>Para llevar y recoger</h3><p>Llama o escribe por WhatsApp y tenlo listo en minutos.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="menu-section" id="menu">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow">La Carta</p>
+      <h2>Elige categoría</h2>
+      <p>Todos los precios en euros. Los menús incluyen patatas fritas y bebida salvo que se indique lo contrario.</p>
+    </div>
+    <div class="tabs" id="tabs" role="tablist"></div>
+    <p class="allergen-note">¿Alergias o intolerancias? Consulta con nuestro equipo antes de pedir.</p>
+    <div id="menuContent"></div>
+  </div>
+</section>
+
+<section class="location" id="ubicacion">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow">Encuéntranos</p>
+      <h2>Patraix, València</h2>
+    </div>
+    <div class="loc-grid reveal">
+      <div class="loc-details">
+        <p><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg><span><strong>Dirección</strong>C/ Cermistras Ros, 4 · 46014 València (Patraix)</span></p>
+        <p><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.13.96.36 1.9.68 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.9.32 1.85.55 2.81.68A2 2 0 0122 16.92z"/></svg><span><strong>Teléfono</strong>673 035 749 · 600 703 272</span></p>
+        <table class="hours-table">
+          <tr><td>Mediodía</td><td>12:00 – 16:00</td></tr>
+          <tr><td>Noche</td><td>18:00 – 00:00</td></tr>
+          <tr><td>Todos los días</td><td>Sin descanso semanal</td></tr>
+        </table>
+        <div class="hero-ctas" style="margin-top:1.5rem;">
+          <a class="btn btn-primary" href="https://www.google.com/maps/dir/?api=1&destination=Calle+Cermistras+Ros+4,+46014+Valencia" target="_blank" rel="noopener">Cómo llegar</a>
+        </div>
+      </div>
+      <div class="map-embed">
+        <iframe src="https://www.google.com/maps?q=Calle+Cermistras+Ros+4,+46014+Valencia&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Mapa Ros Döner Kebab"></iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer id="contacto">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <h4>Ros Döner Kebab</h4>
+        <p>Tacos, kebab y pizzería en el barrio de Patraix, València. Menús combinados, pizzas familiares y todo para llevar.</p>
+      </div>
+      <div>
+        <h4>Contacto</h4>
+        <a href="tel:+34673035749">673 035 749</a>
+        <a href="tel:+34600703272">600 703 272</a>
+        <a href="#" id="footWa">WhatsApp</a>
+      </div>
+      <div>
+        <h4>Horario</h4>
+        <p>12:00–16:00 · 18:00–00:00</p>
+        <p>Todos los días</p>
+        <a href="#menu">Ver la carta</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© <span id="year"></span> Ros Döner Kebab · Patraix, València</span>
+      <span>Sitio web: Umar Digital Lab</span>
+    </div>
+  </div>
+</footer>
+
+<a class="float-wa" id="floatWa" href="#" target="_blank" rel="noopener" aria-label="Pedir por WhatsApp">
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="#1B1411"><path d="M12 2a10 10 0 00-8.6 15L2 22l5.2-1.4A10 10 0 1012 2zm0 18a8 8 0 01-4.1-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8 8 0 1112 20zm4.4-5.9c-.2-.1-1.4-.7-1.7-.8-.2-.1-.4-.1-.6.1-.2.2-.6.8-.8 1-.1.2-.3.2-.5.1-.7-.3-1.4-.7-2-1.3-.5-.5-1-1.1-1.4-1.8-.1-.2 0-.4.1-.5l.4-.5c.1-.2.2-.3.2-.5.1-.2 0-.4 0-.5-.1-.1-.6-1.5-.8-2-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.2.2-1 1-1 2.3s1 2.7 1.1 2.9c.1.2 2 3 4.8 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.4-.6 1.6-1.1.2-.5.2-1 .1-1.1z"/></svg>
+</a>
+
+<script>
+const WA_NUMBER = "34673035749";
+
+// ===== EDIT PRICES / ITEMS HERE =====
+// Each dish is one line: name, desc, and price (or price + priceG for Normal/Grande, or price + priceMenu for Solo/Menú).
+// To change a price, just edit the number in quotes, e.g. price:'7,00' -> price:'7,50'. No other code needs to change.
+const MENU_DATA = [
+  { key:'menus', label:'Menús', note:'Cada menú incluye patatas fritas y bebida.', items:[
+    {name:'Menú 1', desc:'1 kebab pita + patatas fritas + bebida 33cl', price:'7,00', priceG:'8,00'},
+    {name:'Menú 2', desc:'1 dürüm + patatas fritas + bebida 33cl', price:'7,00', priceG:'8,00'},
+    {name:'Menú 3', desc:'Plato de kebab con patatas, pan y ensalada + bebida', price:'8,00'},
+    {name:'Menú 4', desc:'1 hamburguesa + patatas fritas + bebida 33cl', price:'7,00', priceG:'8,00'},
+    {name:'Menú 5', desc:'1 pizza mediana + 1 kebab con todo + bebida 1L', price:'15,00'},
+    {name:'Menú 6', desc:'3 kebabs de ternera + patatas fritas + bebida 1L', price:'17,00', priceG:'20,00'},
+    {name:'Menú 7', desc:'4 kebabs de ternera + patatas fritas + bebida 1L', price:'22,00', priceG:'24,00'},
+    {name:'Menú 8', desc:'2 kebabs pita de ternera + patatas fritas + bebida 1L', price:'13,00', priceG:'15,00'},
+    {name:'Menú 9', desc:'1 pizza familiar + patatas fritas + bebida 1L', price:'17,00'},
+    {name:'Menú 10', desc:'2 pizzas medianas + patatas fritas + bebida 1L', price:'17,00'},
+    {name:'Menú 11', desc:'2 pizzas grandes + 1 pizza mediana + patatas fritas + bebida 1L', price:'25,00'},
+    {name:'Menú 12', desc:'2 pizzas familiares + patatas + bebida 1L', price:'30,00'},
+  ], orderable:true},
+  { key:'kebab', label:'Kebab y Dürüm', groups:[
+    { name:'Pita', items:[
+      {name:'Döner normal', desc:'Pan, carne de ternera, pollo o mixto, ensalada y salsa', price:'5,00', priceG:'6,00'},
+      {name:'Döner con queso', desc:'Pan, carne de ternera y salsa (pollo +0,50€)', price:'6,00', priceG:'7,00'},
+      {name:'Döner vegetal', desc:'Pan, falafel, ensalada y salsa', price:'6,00', priceG:'7,00'},
+      {name:'Döner solo carne', desc:'Pan, carne de ternera o pollo, ensalada y salsa', price:'6,00', priceG:'7,00'},
+      {name:'Döner con patatas', desc:'Pan, carne de ternera o pollo, ensalada, patatas y salsa', price:'6,00', priceG:'7,00'},
+      {name:'Döner especial', desc:'Pan, carne de ternera, pollo, ensalada y salsa', price:'6,00', priceG:'7,00'},
+    ]},
+    { name:'Dürüm', items:[
+      {name:'Dürüm normal', desc:'Pan, carne de ternera, pollo o mixto, ensalada y salsa', price:'5,00', priceG:'6,00'},
+      {name:'Dürüm solo carne', desc:'Pan, carne de ternera y salsa', price:'6,00', priceG:'7,00'},
+      {name:'Dürüm con queso', desc:'Pan, carne de ternera y salsa (pollo +0,50€)', price:'6,00', priceG:'7,00'},
+      {name:'Dürüm vegetal', desc:'Pan, falafel, ensalada, patatas y salsa', price:'6,00', priceG:'7,00'},
+      {name:'Dürüm con patatas', desc:'Pan, carne de ternera o pollo, ensalada, patatas y salsa', price:'6,00', priceG:'7,00'},
+      {name:'Dürüm especial', desc:'Pan, carne de ternera o pollo, ensalada, patatas y salsa', price:'6,00', priceG:'7,00'},
+    ]},
+  ]},
+  { key:'platos', label:'Platos y Hamburguesa', items:[
+    {name:'Plato kebab', desc:'Carne de ternera, pollo o mixto, ensalada y patatas fritas', price:'7,00'},
+    {name:'Plato con queso', desc:'Carne de ternera o pollo, queso, ensalada y patatas fritas', price:'8,00'},
+    {name:'Plato vegetariano', desc:'Falafel, queso, ensalada y patatas fritas', price:'6,50'},
+    {name:'Plato solo carne', desc:'Carne de ternera, queso, ensalada y patatas fritas', price:'8,50'},
+    {name:'Plato con bacon y queso', desc:'Carne de ternera o pollo, bacon, queso y patatas fritas', price:'8,00'},
+    {name:'Patatas al horno con bacon y queso', desc:'', price:'8,00'},
+    {name:'Hamburguesa normal', desc:'Lechuga, tomate, pollo o ternera, huevo y queso', price:'5,00', priceG:'6,00'},
+  ]},
+  { key:'pizzas', label:'Pizzas', note:'Normal 8,00€ · Grande 10,00€ · Familiar 15,00€ (consulta suplemento en pizzas más cargadas)', items:[
+    {name:'Margarita', desc:'Tomate, queso y orégano'},
+    {name:'Vegetariana', desc:'Tomate, queso, pimiento verde y rojo, cebolla, champiñón, maíz, olivas y orégano'},
+    {name:'Mexicana', desc:'Tomate, queso, carne picada, champiñón, maíz y orégano'},
+    {name:'Hawaiana', desc:'Tomate, queso, jamón y piña'},
+    {name:'Caprichosa', desc:'Tomate, queso, jamón, champiñones, olivas y huevo'},
+    {name:'Tono atún', desc:'Tomate, queso, atún, cebolla, ajo, olivas y orégano'},
+    {name:'Roma', desc:'Tomate, queso, jamón, champiñones y orégano'},
+    {name:'Jamón y queso', desc:'Tomate, queso, jamón y orégano'},
+    {name:'Cuatro quesos', desc:'Tomate, cuatro quesos y orégano'},
+    {name:'Barbacoa', desc:'Tomate, pollo, ternera y salsa barbacoa'},
+    {name:'Barbacoa Tex', desc:'Tomate, queso, jamón york, ternera y salsa barbacoa'},
+    {name:'Barbacoa 2', desc:'Tomate, pollo, bacon, salsa barbacoa, carne picada y orégano'},
+    {name:'Super pizza', desc:'Tomate, pollo, bacon, carne picada, champiñones, cebolla y orégano'},
+    {name:'Carbonara', desc:'Tomate, queso, champiñones y orégano'},
+    {name:'Bacon tomate', desc:'Tomate, nata, bacon, huevo, cebolla y orégano'},
+    {name:'Carne picada', desc:'Tomate, queso y carne picada'},
+    {name:'Al gusto', desc:'Tomate, queso y 2 ingredientes a elegir'},
+    {name:'Döner kebab', desc:'Tomate, queso, carne asada, ajo y cebolla'},
+    {name:'Miramare', desc:'Tomate, queso, champiñones, jamón york, gambas y orégano'},
+    {name:'Napoli', desc:'Tomate, queso mozzarella, jamón york y anchoas'},
+    {name:'Tikka', desc:'Brocheta de pollo, cebolla y orégano'},
+    {name:'Toronto', desc:'Tomate, queso, salami, champiñón y orégano'},
+    {name:'Calzone', desc:'Tomate, queso, salami, champiñón, jamón y orégano'},
+    {name:'Pepperoni', desc:'Tomate, queso, pepperoni y orégano'},
+    {name:'Salami', desc:'Tomate, queso, salami y orégano'},
+    {name:'Super barbacoa', desc:'Tomate, queso, pollo, bacon, salsa barbacoa, champiñones, cebolla y orégano'},
+    {name:'Super carbonara', desc:'Tomate, queso, salami, champiñón, jamón y orégano'},
+    {name:'4 estaciones', desc:'Tomate, queso, chorizo picante, olivas negras, champiñones, salami, jamón, bacon, huevo y cebolla'},
+    {name:'Picante', desc:'Salsa de tomate, queso, chorizo, salami, bacon, huevo, cebolla y orégano'},
+  ]},
+  { key:'tapas', label:'Tapas y Extras', items:[
+    {name:'Patatas fritas', desc:'', price:'3,00', priceG:'4,00'},
+    {name:'Patatas bravas o deluxe', desc:'', price:'4,50', priceG:'5,50'},
+    {name:'Döner box', desc:'Carne de pollo o ternera con patatas', price:'4,00', priceG:'5,00'},
+    {name:'Roquetas (6 uds.)', desc:'', price:'6,00', priceMenu:'7,50'},
+    {name:'Alitas de pollo (6 uds.)', desc:'', price:'6,00', priceMenu:'7,50'},
+    {name:'Falafel (6 uds.)', desc:'', price:'5,00', priceMenu:'7,00'},
+    {name:'Nuggets de pollo (6 uds.)', desc:'', price:'6,00', priceMenu:'7,50'},
+    {name:'Taco', desc:'', price:'8,00', priceMenu:'10,00'},
+    {name:'Plato gratinado', desc:'', price:'7,00', priceMenu:'9,00'},
+    {name:'Finger de pollo (6 uds.)', desc:'', price:'6,00', priceMenu:'7,50'},
+    {name:'Finger de queso (6 uds.)', desc:'', price:'6,00', priceMenu:'7,50'},
+    {name:'Aros de cebolla', desc:'', price:'6,00', priceMenu:'7,50'},
+    {name:'Jalapeños', desc:'', price:'6,00', priceMenu:'7,50'},
+    {name:'Calamares', desc:'', price:'7,00', priceMenu:'7,50'},
+    {name:'Dürüm gratinado', desc:'', price:'7,00', priceMenu:'9,00'},
+  ]},
+  { key:'bebidas', label:'Bebidas', items:[
+    {name:'Refresco 33cl', desc:'', price:'1,50'},
+    {name:'Refresco 1L', desc:'', price:'2,50'},
+    {name:'Refresco 2L', desc:'', price:'3,00'},
+    {name:'Bebidas latino', desc:'Pony Malta y similares', note:'Consultar precio'},
+  ]},
+];
+
+function priceHTML(item){
+  if(item.priceG){
+    return `<div class="price-group"><span class="price-tag"><span class="lbl">N</span>${item.price}€</span><span class="price-tag alt"><span class="lbl">G</span>${item.priceG}€</span></div>`;
+  }
+  if(item.priceMenu){
+    return `<div class="price-group"><span class="price-tag"><span class="lbl">Solo</span>${item.price}€</span><span class="price-tag alt"><span class="lbl">Menú</span>${item.priceMenu}€</span></div>`;
+  }
+  if(item.price){
+    return `<span class="price-tag">${item.price}€</span>`;
+  }
+  return `<span class="price-note">${item.note||'Consultar'}</span>`;
+}
+
+function orderLink(item){
+  const msg = `Hola, querría pedir: ${item.name}${item.desc ? ' ('+item.desc+')' : ''}. ¿Está disponible para recoger?`;
+  return `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
+}
+
+function cardHTML(item, orderable){
+  return `<div class="menu-card">
+    <div class="info"><h3>${item.name}</h3>${item.desc?`<p>${item.desc}</p>`:''}
+    ${orderable?`<a class="order-link" href="${orderLink(item)}" target="_blank" rel="noopener">Pedir por WhatsApp →</a>`:''}
+    </div>
+    ${priceHTML(item)}
+  </div>`;
+}
+
+function renderCategory(key){
+  const cat = MENU_DATA.find(c=>c.key===key);
+  const el = document.getElementById('menuContent');
+  let html = '';
+  if(cat.note) html += `<p class="cat-note">${cat.note}</p>`;
+  if(cat.groups){
+    cat.groups.forEach(g=>{
+      html += `<h3 class="group-title">${g.name}</h3><div class="menu-grid">`;
+      g.items.forEach(i=> html += cardHTML(i,false));
+      html += `</div>`;
+    });
+  } else {
+    html += `<div class="menu-grid">`;
+    cat.items.forEach(i=> html += cardHTML(i, !!cat.orderable));
+    html += `</div>`;
+  }
+  el.innerHTML = html;
+}
+
+function buildTabs(){
+  const tabs = document.getElementById('tabs');
+  tabs.innerHTML = MENU_DATA.map((c,idx)=>
+    `<button class="tab${idx===0?' active':''}" data-key="${c.key}" role="tab">${c.label}</button>`
+  ).join('');
+  tabs.addEventListener('click', e=>{
+    const btn = e.target.closest('.tab');
+    if(!btn) return;
+    tabs.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    btn.classList.add('active');
+    renderCategory(btn.dataset.key);
+  });
+}
+
+buildTabs();
+renderCategory(MENU_DATA[0].key);
+
+// Hero / footer / floating WhatsApp links
+const waGeneric = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent('Hola! Querría hacer un pedido en Ros Döner Kebab.')}`;
+['heroWa','footWa','floatWa','navWa'].forEach(id=>{
+  const el = document.getElementById(id);
+  if(el) el.href = waGeneric;
+});
+
+// Open / closed status (Europe/Madrid time)
+function madridNow(){
+  return new Date(new Date().toLocaleString('en-US', { timeZone: 'Europe/Madrid' }));
+}
+function updateStatus(){
+  const now = madridNow();
+  const mins = now.getHours()*60 + now.getMinutes();
+  const inLunch = mins >= 12*60 && mins < 16*60;
+  const inDinner = mins >= 18*60 && mins < 24*60;
+  const pill = document.getElementById('statusPill');
+  const text = document.getElementById('statusText');
+  if(inLunch || inDinner){
+    pill.classList.remove('closed');
+    text.textContent = 'Abierto ahora';
+  } else {
+    pill.classList.add('closed');
+    text.textContent = mins < 12*60 ? 'Abre a las 12:00' : (mins < 18*60 ? 'Abre a las 18:00' : 'Abre mañana a las 12:00');
+  }
+}
+updateStatus();
+setInterval(updateStatus, 60000);
+
+document.getElementById('year').textContent = new Date().getFullYear();
+
+// Scroll reveal
+const io = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+},{threshold:.15});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
