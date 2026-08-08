@@ -1,0 +1,1738 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>Ros Doner Kebab · Tacos · Kebab · Pizzería</title>
+
+<style>
+
+:root {
+    --red: #c51f25;
+    --gold: #f3b51b;
+    --black: #111;
+    --card: #1d1d1d;
+    --muted: #c9c9c9;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: var(--black);
+    color: white;
+    padding-bottom: 90px;
+}
+
+header {
+    background: #050505;
+    text-align: center;
+    padding: 18px;
+    border-bottom: 3px solid var(--red);
+}
+
+.logo {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--red);
+    box-shadow: 0 0 25px #000;
+}
+
+h1 {
+    margin: 8px 0 2px;
+    font-size: 28px;
+}
+
+header p {
+    margin: 4px 0;
+    color: #ddd;
+}
+
+.search {
+    width: calc(100% - 28px);
+    max-width: 700px;
+    display: block;
+    margin: 14px auto;
+    padding: 13px 16px;
+    border-radius: 12px;
+    border: 1px solid #444;
+    background: #222;
+    color: #fff;
+    font-size: 16px;
+}
+
+nav {
+    background: #191919;
+    padding: 10px;
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+}
+
+nav button {
+    border: 0;
+    border-radius: 22px;
+    background: #333;
+    color: #fff;
+    padding: 10px 15px;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+nav button.active {
+    background: var(--red);
+}
+
+main {
+    max-width: 1200px;
+    margin: auto;
+    padding: 14px;
+}
+
+section {
+    margin: 22px 0;
+}
+
+h2 {
+    color: var(--gold);
+    border-bottom: 2px solid var(--red);
+    padding-bottom: 7px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns:
+        repeat(auto-fit, minmax(260px, 1fr));
+    gap: 10px;
+}
+
+.card {
+    background: var(--card);
+    border: 1px solid #383838;
+    border-radius: 14px;
+    padding: 14px;
+}
+
+.card h3 {
+    margin: 0 0 6px;
+    font-size: 17px;
+}
+
+.desc {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.35;
+}
+
+.price {
+    color: var(--gold);
+    font-size: 18px;
+    font-weight: 700;
+    margin-top: 10px;
+}
+
+.add {
+    float: right;
+    background: var(--red);
+    color: #fff;
+    border: 0;
+    border-radius: 9px;
+    padding: 8px 13px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.bottom {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #050505;
+    border-top: 2px solid var(--red);
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 20;
+}
+
+.wa {
+    background: #25d366;
+    color: #fff;
+    border: 0;
+    border-radius: 10px;
+    padding: 12px 18px;
+    font-weight: bold;
+}
+
+.cart {
+    position: fixed;
+    right: 15px;
+    bottom: 78px;
+    width: min(390px, calc(100% - 30px));
+    max-height: 60vh;
+    overflow: auto;
+    background: #181818;
+    border: 1px solid #444;
+    border-radius: 15px;
+    padding: 15px;
+    display: none;
+    z-index: 30;
+    box-shadow: 0 10px 40px #000;
+}
+
+.cart.open {
+    display: block;
+}
+
+.cartrow {
+    padding: 10px 0;
+    border-bottom: 1px solid #333;
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.qty button {
+    background: #333;
+    color: #fff;
+    border: 0;
+    border-radius: 6px;
+    padding: 5px 9px;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<header>
+
+<!-- TU LOGO VA AQUÍ -->
+<img
+    class="logo"
+    src="logo.jpg"
+    alt="Ros Doner Kebab">
+
+<h1>Ros Doner Kebab</h1>
+
+<p>TACOS · KEBAB · PIZZERÍA</p>
+
+<p>
+HORARIO:
+12:00-16:00h · 18:00-00:00h
+</p>
+
+<p>
+📞 673 035 749 · 600 703 272
+</p>
+
+</header>
+
+
+<input
+    id="search"
+    class="search"
+    placeholder="🔎 Buscar en el menú...">
+
+
+<nav id="nav"></nav>
+
+
+<main id="menu"></main>
+
+
+<div
+    id="cart"
+    class="cart">
+</div>
+
+
+<div class="bottom">
+
+<strong>
+🛒 <span id="count">0</span>
+·
+<span id="total">0,00 €</span>
+</strong>
+
+<button
+    class="wa"
+    id="cartBtn">
+
+Ver carrito / WhatsApp
+
+</button>
+
+</div>
+
+
+<script>
+
+
+/* ==================================================
+   MENÚ COMPLETO
+================================================== */
+
+const MENU = {
+
+
+/* ==================================================
+   MENÚS 1 - 12
+================================================== */
+
+"Menús": [
+
+[
+"MENÚ 1",
+"1 Kebab Ternera + Patatas Fritas + Bebida 33cl",
+"7,00 €",
+"8,00 €"
+],
+
+[
+"MENÚ 2",
+"1 Durum Ternera + Patatas Fritas + Bebida 33cl",
+"7,00 €",
+"8,00 €"
+],
+
+[
+"MENÚ 3",
+"1 Plato Kebab con Patatas + Pan + Ensalada + Bebida 33cl",
+"8,00 €",
+""
+],
+
+[
+"MENÚ 4",
+"1 Hamburguesa + Patatas + Bebida 33cl",
+"7,00 €",
+""
+],
+
+[
+"MENÚ 5",
+"1 Pizza Mediana + 1 Kebab Con Todo + Bebida 1L",
+"15,00 €",
+""
+],
+
+[
+"MENÚ 6",
+"3 Kebabs Ternera + Patatas Fritas + Bebida 1L",
+"17,00 €",
+"20,00 €"
+],
+
+[
+"MENÚ 7",
+"4 Kebabs Ternera + Patatas Fritas + Bebida 1L",
+"22,00 €",
+"24,00 €"
+],
+
+[
+"MENÚ 8",
+"2 Kebabs Pita Ternera + Patatas Fritas + Bebida 1L",
+"13,00 €",
+"15,00 €"
+],
+
+[
+"MENÚ 9",
+"1 Pizza Familiar + Patatas Fritas + Bebida 1L",
+"17,00 €",
+""
+],
+
+[
+"MENÚ 10",
+"2 Pizzas Medianas + Patatas Fritas + Bebida 1L",
+"17,00 €",
+""
+],
+
+[
+"MENÚ 11",
+"2 Pizzas Grandes + Patatas Fritas + Bebida 1L",
+"25,00 €",
+""
+],
+
+[
+"MENÚ 12",
+"2 Pizzas Familiares + Bebida 1L + Patatas",
+"30,00 €",
+""
+]
+
+],
+
+
+/* ==================================================
+   PITA
+================================================== */
+
+"Pita": [
+
+[
+"1. DONER KEBAB NORMAL",
+"Pan, Carne Ternera, Pollo o Mixto, Ensalada y Salsa",
+"5,00 €",
+"6,00 €"
+],
+
+[
+"2. DONER KEBAB SOLO CARNE",
+"Pan, Carne Ternera o Pollo +0,50€ Si es Pollo",
+"6,00 €",
+"7,00 €"
+],
+
+[
+"3. DONER KEBAB CON QUESO",
+"Pan, Carne Ternera, Pollo o Mixto, Ensalada y Salsa",
+"6,00 €",
+"7,00 €"
+],
+
+[
+"4. DONER KEBAB VEGETAL",
+"Pan, Falafel, Ensalada y Salsa",
+"5,00 €",
+"6,00 €"
+],
+
+[
+"5. DONER KEBAB SOLO CARNE CON PATATAS",
+"Pan, Carne Ternera/Pollo, Patatas y Salsa",
+"6,00 €",
+"7,00 €"
+],
+
+[
+"6. DONER KEBAB ESPECIAL",
+"Pan, Carne Ternera, Ensalada y Salsa",
+"6,00 €",
+"7,00 €"
+]
+
+],
+
+
+/* ==================================================
+   DURUM
+================================================== */
+
+"Durum": [
+
+[
+"7. DURUM NORMAL",
+"Pan, Carne Ternera, Pollo o Mixto, Ensalada y Salsa",
+"5,00 €",
+"6,00 €"
+],
+
+[
+"8. DURUM SOLO CARNE",
+"Pan, Carne Ternera o Pollo +0,50€ Si es Pollo",
+"6,00 €",
+"7,00 €"
+],
+
+[
+"9. DURUM CON QUESO",
+"Pan, Carne Ternera, Pollo o Mixto, Ensalada y Salsa",
+"6,00 €",
+"7,00 €"
+],
+
+[
+"10. DURUM VEGETAL",
+"Pan, Falafel, Ensalada y Salsa",
+"5,00 €",
+"6,00 €"
+],
+
+[
+"11. DURUM SOLO CARNE CON PATATAS",
+"Pan, Carne Ternera/Pollo, Patatas y Salsa",
+"6,00 €",
+"7,00 €"
+],
+
+[
+"12. DURUM ESPECIAL",
+"Pan, Carne Ternera, Ensalada y Salsa",
+"6,00 €",
+"7,00 €"
+]
+
+],
+
+
+/* ==================================================
+   PLATOS
+================================================== */
+
+"Platos": [
+
+[
+"13. PLATO KEBAB",
+"Carne Ternera, Pollo o Mixto, Ensalada y Patatas Fritas",
+"7,00 €",
+""
+],
+
+[
+"14. PLATO CON QUESO",
+"Carne Ternera o Pollo, Queso, Ensalada y Patatas Fritas",
+"8,00 €",
+""
+],
+
+[
+"15. PLATO VEGETARIANO",
+"Ensalada, Queso, Falafel y Patatas Fritas",
+"6,50 €",
+""
+],
+
+[
+"16. PLATO SOLO CARNE",
+"",
+"9,00 €",
+""
+],
+
+[
+"17. PLATO SOLO CARNE CON PATATAS",
+"",
+"8,50 €",
+""
+],
+
+[
+"17. PLATO PATATAS AL HORNO CON BACON Y QUESO",
+"",
+"6,00 €",
+"8,00 €"
+]
+
+],
+
+
+/* ==================================================
+   HAMBURGUESA
+================================================== */
+
+"Hamburguesas": [
+
+[
+"HAMBURGUESA NORMAL",
+"Lechuga, Tomate, Pollo o Ternera, Huevo, Queso",
+"5,00 €",
+"6,00 €"
+]
+
+],
+
+
+/* ==================================================
+   BEBIDAS
+================================================== */
+
+"Bebidas": [
+
+[
+"Refrescos 33cl",
+"",
+"1,50 €",
+""
+],
+
+[
+"Refrescos 1L",
+"",
+"2,50 €",
+""
+],
+
+[
+"Refrescos 2L",
+"",
+"3,00 €",
+""
+]
+
+],
+
+
+/* ==================================================
+   PIZZAS 1 - 29
+   NORMAL 8€ · GRANDE 10€ · FAMILIAR 15€
+================================================== */
+
+"Pizzas": [
+
+[
+"1. MARGARITA",
+"Tomate, Queso y Orégano",
+"8,00 €",
+"10,00 €",
+"15,00 €"
+],
+
+[
+"2. VEGETARIANA",
+"Tomate, Queso, Pimiento Verde y Rojo, Cebolla, Champiñón, Maíz, Olivas, Ajo y Orégano",
+"8,00 €",
+"10,00 €",
+"15,00 €"
+],
+
+[
+"3. MEXICANA",
+"Tomate, Queso, Carne Picada, Champiñones y Orégano",
+"8,00 €",
+"10,00 €",
+"15,00 €"
+],
+
+[
+"4. HAWAIANA",
+"Tomate, Queso, Jamón y Piña",
+"8,00 €",
+"10,00 €",
+"15,00 €"
+],
+
+[
+"5. CAPRICHOSA",
+"Tomate, Queso, Jamón, Champiñones, Olivas y Huevo",
+"8,00 €",
+"10,00 €",
+"15,00 €"
+],
+
+[
+"6. TONO ATÚN",
+"Tomate, Queso, Atún, Cebolla, Ajo, Olivas y Orégano",
+"8,00 €",
+"10,00 €",
+"15,00 €"
+],
+
+[
+"7. ROMA",
+"Tomate, Queso, Jamón, Champiñones y Orégano",
+"8,00 €",
+"10,00 €",
+"15,00 €"
+],
+
+[
+"8. JAMÓN Y QUESO",
+"Tomate, Queso, Jamón y Orégano",
+"8,00 €",
+"10,00 €",
+"15,00 €"
+],
+
+[
+"9. CUATRO QUESOS",
+"Tomate, 4 Quesos y Orégano",
+"8,00 €",
+"10,00 €",
+"15,00 €"
+],
+
+[
+"10. BARBACOA",
+"Tomate, Queso, Pollo, Ternera y Salsa Barbacoa",
+"8,00 €",
+"10,00 €",
+"15,00 €"
+],
+
+[
+"11. BARBACOA TEX",
+"Tomate, Queso, Jamón York, Ternera y Salsa Barbacoa",
+"8,00 €",
+"10,00 €",
+"15,00 €"
+],
+
+[
+"12. BARBACOA 2",
+"Queso, Pollo, Bacon, Salsa Barbacoa, Carne Picada y Orégano",
+"8,00 €",
+"10,00 €",
+"15,00 €"
+],
+
+[
+"13. SUPER PIZZA",
+"Queso, Pollo, Bacon, Salsa Tomate, Carne Picada, Champiñones, Cebolla y Orégano",
+"8,00 €",
+"10,00 €",
+"15,00 €"
+],
+
+[
+"14. CARBONARA",
+"Tomate, Queso, Nata, Bacon, Huevo, Cebolla y Orégano",
+"8,00 €",
+"10,00 €",
+"15,00 €"
+],
+
+[
+"15. BACON",
+"Tomate, Queso y Bacon",
+"8,00 €",
+"10,00 €",
+"15,00 €"
+],
+
+[
+"16. CARNE PICADA",
+"Tomate, Queso y Carne Picada",
+"8,00 €",
+"10,00 €",
+"15,00 €"
+],
+
+[
+"17. AL GUSTO",
+"Tomate, Queso y 2 ingredientes a elegir",
+"8,00 €",
+"10,00 €",
+"15,00 €"
+],
+
+[
+"18. DONER KEBAB",
+"Tomate, Queso, Carne Asada, Ajo y Cebolla",
+"8,00 €",
+"10,00 €",
+"15,00 €"
+],
+
+[
+"19. MIRAMARE",
+"Tomate, Queso, Champiñones, Jamón York, Gambas y Orégano",
+"8,00 €",
+"10,00 €",
+"15,00 €"
+],
+
+[
+"20. NAPOLI",
+"Tomate, Queso Mozzarella, Jamón York, Anchoas",
+"8,00 €",
+"10,00 €",
+"15,00 €"
+],
+
+[
+"21. TIKKA",
+"Tomate, Queso, Brocheta de Pollo, Cebolla y Orégano",
+"8,00 €",
+"10,00 €",
+"15,00 €"
+],
+
+[
+"22. TORONTO",
+"Tomate, Queso, Salami, Champiñón y Orégano",
+"8,00 €",
+"10,00 €",
+"15,00 €"
+],
+
+[
+"23. CALZONE",
+"Tomate, Queso, Salami, Champiñón, Jamón y Orégano",
+"8,00 €",
+"10,00 €",
+"15,00 €"
+],
+
+[
+"24. PEPPERONI",
+"Tomate, Queso, Pepperoni y Orégano",
+"8,00 €",
+"10,00 €",
+"15,00 €"
+],
+
+[
+"25. SALAMI",
+"Tomate, Queso, Salami y Orégano",
+"8,00 €",
+"10,00 €",
+"15,00 €"
+],
+
+[
+"26. SUPER BARBACOA",
+"Queso, Carne Picada, Pollo, Bacon, Salsa Barbacoa, Champiñones, Cebolla y Orégano",
+"8,00 €",
+"10,00 €",
+"15,00 €"
+],
+
+[
+"27. SUPER CARBONARA",
+"Tomate, Queso, Nata, Bacon, Huevo, Cebolla, Carne Picada, Pollo y Orégano",
+"8,00 €",
+"10,00 €",
+"15,00 €"
+],
+
+[
+"28. 4 ESTACIONES",
+"Tomate, Queso, Salami, Champiñones, Jamón",
+"8,00 €",
+"10,00 €",
+"15,00 €"
+],
+
+[
+"29. PICANTE",
+"Salsa Tomate, Queso, Chorizo Picante, Olivas Negro y Orégano",
+"8,00 €",
+"10,00 €",
+"15,00 €"
+],
+
+
+/* ==================================================
+   TAPAS / MENÚS 13 - 24
+================================================== */
+
+"Tapas": [
+
+[
+"PATATAS BRAVAS O DELUXE",
+"Normal: 4,50 € | Grande: 5,50 €"
+],
+
+[
+"PATATAS FRITAS",
+"Normal: 3,00 € | Grande: 4,00 €"
+],
+
+[
+"DONER BOX",
+"Carne Pollo o Ternera, Patatas",
+"4,00 €",
+"5,00 €"
+],
+
+[
+"MENÚ 13 ROQUETAS",
+"6 uds. | Con Patatas 6,00 € | Menú 7,50 €"
+],
+
+[
+"MENÚ 14 ALITAS DE POLLO",
+"6 uds. | Con Patatas 6,00 € | Menú 7,50 €"
+],
+
+[
+"MENÚ 15 FALAFEL",
+"6 uds. | Solo 5,00 € | Menú 7,00 €"
+],
+
+[
+"MENÚ 16 NUGGETS DE POLLO",
+"6 uds. | Con Patatas 6,00 € | Menú 7,50 €"
+],
+
+[
+"MENÚ 17 TACO",
+"Solo 6,00 € | Solo + patatas 8,00 € | Menú Normal 9,00 € | Menú XL 10,00 €"
+],
+
+[
+"MENÚ 18 PLATO GRATINADO",
+"Solo 7,00 € | Menú 9,00 €"
+],
+
+[
+"MENÚ 19 FINGER DE POLLO",
+"6 uds. | Con Patatas 6,00 € | Menú 7,50 €"
+],
+
+[
+"MENÚ 20 FINGER DE QUESO",
+"6 uds. | Con Patatas 6,00 € | Menú 7,50 €"
+],
+
+[
+"MENÚ 21 AROS DE CEBOLLA",
+"Con Patatas 6,00 € | Menú 7,50 €"
+],
+
+[
+"MENÚ 22 JALAPEÑOS",
+"Con Patatas 6,00 € | Menú 7,50 €"
+],
+
+[
+"MENÚ 23 CALAMARES",
+"Con Patatas 6,00 € | Menú 7,50 €"
+],
+
+[
+"MENÚ 24 DURUM GRATINADO",
+"Solo 7,00 € | Menú 9,00 €"
+]
+
+]
+
+};const MENU = {
+   ...
+};
+/* ==================================================
+   RENDERIZAR EL MENÚ
+================================================== */
+
+const menuContainer = document.getElementById("menu");
+const navContainer = document.getElementById("nav");
+
+let cart = [];
+
+
+/* ==================================================
+   CREAR CATEGORÍAS
+================================================== */
+
+Object.keys(MENU).forEach(category => {
+
+    const button = document.createElement("button");
+
+    button.textContent = category;
+
+    button.onclick = () => {
+
+        document
+            .getElementById(
+                "section-" +
+                category.replace(/\s/g, "-")
+            )
+            ?.scrollIntoView({
+                behavior: "smooth"
+            });
+
+    };
+
+    navContainer.appendChild(button);
+
+});
+
+
+/* ==================================================
+   MOSTRAR PRODUCTOS
+================================================== */
+
+Object.entries(MENU).forEach(
+([category, products]) => {
+
+    const section = document.createElement("section");
+
+    section.id =
+        "section-" +
+        category.replace(/\s/g, "-");
+
+    const title = document.createElement("h2");
+
+    title.textContent = category;
+
+    section.appendChild(title);
+
+
+    const grid = document.createElement("div");
+
+    grid.className = "grid";
+
+
+    products.forEach(product => {
+
+        const card = document.createElement("article");
+
+        card.className = "card";
+
+
+        const name = product[0];
+
+        const description = product[1];
+
+        const price1 = product[2] || "";
+
+        const price2 = product[3] || "";
+
+        const price3 = product[4] || "";
+
+
+        let pricesHTML = "";
+
+
+        if (price1) {
+
+            pricesHTML += `
+                <span>${price1}</span>
+            `;
+
+        }
+
+
+        if (price2) {
+
+            pricesHTML += `
+                <span> · ${price2}</span>
+            `;
+
+        }
+
+
+        if (price3) {
+
+            pricesHTML += `
+                <span> · ${price3}</span>
+            `;
+
+        }
+
+
+        card.innerHTML = `
+
+            <h3>${name}</h3>
+
+            <div class="desc">
+                ${description || ""}
+            </div>
+
+            <div class="price">
+
+                ${pricesHTML}
+
+                <button
+                    class="add"
+                    onclick="addToCart(
+                        '${escapeText(name)}',
+                        '${escapeText(price1)}'
+                    )">
+
+                    +
+
+                </button>
+
+            </div>
+
+        `;
+
+
+        grid.appendChild(card);
+
+    });
+
+
+    section.appendChild(grid);
+
+    menuContainer.appendChild(section);
+
+});
+
+
+/* ==================================================
+   EVITAR PROBLEMAS CON COMILLAS
+================================================== */
+
+function escapeText(text) {
+
+    return String(text)
+        .replace(/'/g, "\\'")
+        .replace(/"/g, "&quot;");
+
+}
+
+
+/* ==================================================
+   CONVERTIR PRECIO
+================================================== */
+
+function getPrice(price) {
+
+    if (!price) return 0;
+
+    return parseFloat(
+        price
+            .replace("€", "")
+            .replace(",", ".")
+            .trim()
+    ) || 0;
+
+}
+
+
+/* ==================================================
+   AÑADIR AL CARRITO
+================================================== */
+
+function addToCart(name, price) {
+
+    const numericPrice = getPrice(price);
+
+    if (!numericPrice) {
+
+        alert(
+            "Selecciona una opción con precio."
+        );
+
+        return;
+
+    }
+
+
+    const existing = cart.find(
+        item => item.name === name
+    );
+
+
+    if (existing) {
+
+        existing.qty++;
+
+    } else {
+
+        cart.push({
+
+            name: name,
+
+            price: numericPrice,
+
+            qty: 1
+
+        });
+
+    }
+
+
+    updateCart();
+
+}
+
+
+/* ==================================================
+   ACTUALIZAR CARRITO
+================================================== */
+
+function updateCart() {
+
+    const countElement =
+        document.getElementById("count");
+
+    const totalElement =
+        document.getElementById("total");
+
+
+    let total = 0;
+
+    let count = 0;
+
+
+    cart.forEach(item => {
+
+        total +=
+            item.price * item.qty;
+
+        count += item.qty;
+
+    });
+
+
+    countElement.textContent =
+        count;
+
+
+    totalElement.textContent =
+        total
+            .toFixed(2)
+            .replace(".", ",") +
+        " €";
+
+
+    renderCart();
+
+}
+
+
+/* ==================================================
+   MOSTRAR CARRITO
+================================================== */
+
+function renderCart() {
+
+    const cartElement =
+        document.getElementById("cart");
+
+
+    if (cart.length === 0) {
+
+        cartElement.innerHTML = `
+
+            <h3>🛒 Tu carrito</h3>
+
+            <p>
+                El carrito está vacío.
+            </p>
+
+        `;
+
+        return;
+
+    }
+
+
+    let html = `
+
+        <h3>🛒 Tu pedido</h3>
+
+    `;
+
+
+    cart.forEach(
+        (item, index) => {
+
+            const subtotal =
+                item.price * item.qty;
+
+
+            html += `
+
+                <div class="cartrow">
+
+                    <div>
+
+                        <strong>
+                            ${item.name}
+                        </strong>
+
+                        <br>
+
+                        ${item.price
+                            .toFixed(2)
+                            .replace(".", ",")
+                        } €
+
+                    </div>
+
+
+                    <div class="qty">
+
+                        <button
+                            onclick="changeQty(
+                                ${index},
+                                -1
+                            )">
+
+                            −
+
+                        </button>
+
+
+                        ${item.qty}
+
+
+                        <button
+                            onclick="changeQty(
+                                ${index},
+                                1
+                            )">
+
+                            +
+
+                        </button>
+
+                        <br>
+
+                        <strong>
+                            ${subtotal
+                                .toFixed(2)
+                                .replace(".", ",")
+                            } €
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            `;
+
+        }
+    );
+
+
+    html += `
+
+        <br>
+
+        <button
+            onclick="sendWhatsApp()"
+            class="wa"
+            style="width:100%">
+
+            📲 PEDIR POR WHATSAPP
+
+        </button>
+
+        <br><br>
+
+        <button
+            onclick="clearCart()"
+            style="
+                width:100%;
+                padding:10px;
+                border:0;
+                border-radius:8px;
+                background:#444;
+                color:white;
+            ">
+
+            🗑️ Vaciar carrito
+
+        </button>
+
+    `;
+
+
+    cartElement.innerHTML = html;
+
+}
+
+
+/* ==================================================
+   CAMBIAR CANTIDAD
+================================================== */
+
+function changeQty(index, amount) {
+
+    cart[index].qty += amount;
+
+
+    if (cart[index].qty <= 0) {
+
+        cart.splice(index, 1);
+
+    }
+
+
+    updateCart();
+
+}
+
+
+/* ==================================================
+   VACIAR CARRITO
+================================================== */
+
+function clearCart() {
+
+    cart = [];
+
+    updateCart();
+
+}
+
+
+/* ==================================================
+   ABRIR / CERRAR CARRITO
+================================================== */
+
+document
+    .getElementById("cartBtn")
+    .addEventListener(
+        "click",
+        () => {
+
+            document
+                .getElementById("cart")
+                .classList
+                .toggle("open");
+
+        }
+    );
+
+
+/* ==================================================
+   BUSCADOR
+================================================== */
+
+document
+    .getElementById("search")
+    .addEventListener(
+        "input",
+        function () {
+
+            const search =
+                this.value
+                    .toLowerCase()
+                    .trim();
+
+
+            document
+                .querySelectorAll(".card")
+                .forEach(card => {
+
+                    const text =
+                        card
+                            .innerText
+                            .toLowerCase();
+
+
+                    if (
+                        text.includes(search)
+                    ) {
+
+                        card.style.display =
+                            "";
+
+                    } else {
+
+                        card.style.display =
+                            "none";
+
+                    }
+
+                });
+
+        }
+    );
+
+
+/* ==================================================
+   WHATSAPP
+================================================== */
+
+function sendWhatsApp() {
+
+    if (cart.length === 0) {
+
+        alert(
+            "El carrito está vacío."
+        );
+
+        return;
+
+    }
+
+
+    let message =
+        "🍕 *PEDIDO ROS DONER KEBAB*%0A%0A";
+
+
+    let total = 0;
+
+
+    cart.forEach(item => {
+
+        const subtotal =
+            item.price * item.qty;
+
+
+        total += subtotal;
+
+
+        message +=
+
+            "• " +
+            item.name +
+            " x" +
+            item.qty +
+            " = " +
+            subtotal
+                .toFixed(2)
+                .replace(".", ",") +
+            " €%0A";
+
+    });
+
+
+    message +=
+        "%0A💰 *TOTAL: " +
+        total
+            .toFixed(2)
+            .replace(".", ",") +
+        " €*";
+
+
+    /*
+       CAMBIA ESTE NÚMERO
+       POR EL WHATSAPP DEL LOCAL
+    */
+
+    const phone =
+        "34673035749";
+
+
+    const url =
+        "https://wa.me/" +
+        phone +
+        "?text=" +
+        message;
+
+
+    window.open(
+        url,
+        "_blank"
+    );
+
+}
+
+
+/* ==================================================
+   INICIALIZAR
+================================================== */
+
+updateCart();
+
+</script>
+
+</body>
+
+</html>
+<script>
+
+/* ==================================================
+   CERRAR CARRITO AL HACER CLICK FUERA
+================================================== */
+
+document.addEventListener("click", function(event) {
+
+    const cartElement =
+        document.getElementById("cart");
+
+    const cartButton =
+        document.getElementById("cartBtn");
+
+
+    if (
+        cartElement.classList.contains("open") &&
+        !cartElement.contains(event.target) &&
+        !cartButton.contains(event.target)
+    ) {
+
+        cartElement.classList.remove("open");
+
+    }
+
+});
+
+
+/* ==================================================
+   FILTRAR PRODUCTOS POR CATEGORÍA
+================================================== */
+
+function showCategory(category) {
+
+    const sections =
+        document.querySelectorAll("main section");
+
+
+    sections.forEach(section => {
+
+        if (
+            category === "Todo" ||
+            section.dataset.category === category
+        ) {
+
+            section.style.display = "";
+
+        } else {
+
+            section.style.display = "none";
+
+        }
+
+    });
+
+}
+
+
+/* ==================================================
+   BOTÓN TODO
+================================================== */
+
+const allButton =
+    document.createElement("button");
+
+allButton.textContent = "Todo";
+
+allButton.classList.add("active");
+
+allButton.onclick = () => {
+
+    document
+        .querySelectorAll("main section")
+        .forEach(section => {
+
+            section.style.display = "";
+
+        });
+
+
+    document
+        .querySelectorAll("nav button")
+        .forEach(btn => {
+
+            btn.classList.remove("active");
+
+        });
+
+
+    allButton.classList.add("active");
+
+};
+
+
+/* ==================================================
+   AÑADIR BOTÓN TODO AL PRINCIPIO
+================================================== */
+
+navContainer.prepend(allButton);
+
+
+/* ==================================================
+   BOTONES DE CATEGORÍAS
+================================================== */
+
+document
+    .querySelectorAll("nav button")
+    .forEach(button => {
+
+        button.addEventListener(
+            "click",
+            function() {
+
+                document
+                    .querySelectorAll("nav button")
+                    .forEach(btn => {
+
+                        btn.classList.remove("active");
+
+                    });
+
+
+                this.classList.add("active");
+
+            }
+        );
+
+    });
+
+
+/* ==================================================
+   PREPARAR CATEGORÍAS
+================================================== */
+
+document
+    .querySelectorAll("main section")
+    .forEach(section => {
+
+        const title =
+            section.querySelector("h2");
+
+        if (title) {
+
+            section.dataset.category =
+                title.textContent.trim();
+
+        }
+
+    });
+
+
+/* ==================================================
+   MEJORAR BOTONES DE PRECIO
+================================================== */
+
+document
+    .querySelectorAll(".card")
+    .forEach(card => {
+
+        const price =
+            card.querySelector(".price");
+
+        if (!price) return;
+
+
+        const buttons =
+            price.querySelectorAll(".add");
+
+
+        buttons.forEach(button => {
+
+            button.title =
+                "Añadir al carrito";
+
+        });
+
+    });
+
+
+/* ==================================================
+   TECLA ESC PARA CERRAR CARRITO
+================================================== */
+
+document.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (event.key === "Escape") {
+
+            document
+                .getElementById("cart")
+                .classList
+                .remove("open");
+
+        }
+
+    }
+);
+
+
+/* ==================================================
+   MENSAJE INICIAL
+================================================== */
+
+console.log(
+    "🍕 Ros Doner Kebab - menú cargado correctamente"
+);
+
+
+/* ==================================================
+   FIN
+================================================== */
+
+</script>
+
+</body>
+
+</html>
