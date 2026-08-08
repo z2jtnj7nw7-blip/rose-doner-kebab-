@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ros Kebab - Sabor que encanta</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      background: #0b0b0b;
+      color: #fff;
+      padding-bottom: 60px;
+    }
+    /* HEADER */
+    header {
+      background: linear-gradient(180deg, #1a0404 0%, #0b0b0b 100%);
+      border-bottom: 2px solid #b31b1b;
+      padding: 20px;
+      text-align: center;
+      position: relative;
+    }
+    .brand {
+      font-family: 'Georgia', serif;
+    }
+    .brand h1 {
+      font-size: 3.5rem;
+      font-weight: 800;
+      color: #fff;
+      text-shadow: 0 0 20px rgba(255, 80, 0, 0.6);
+      letter-spacing: 2px;
+    }
+    .brand h1 span {
+      color: #d32f2f;
+      display: inline-block;
+      transform: rotate(-5deg);
+    }
+    .brand p {
+      font-size: 1.2rem;
+      color: #fbc02d;
+      background: rgba(0,0,0,0.6);
+      display: inline-block;
+      padding: 4px 16px;
+      border-radius: 30px;
+      border: 1px solid #d32f2f;
+      margin-top: 5px;
+      letter-spacing: 2px;
+    }
+    .crown { font-size: 3rem; display: block; margin-bottom: -10px; }
+    .info-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 15px;
+      font-size: 0.95rem;
+      color: #ccc;
+      background: rgba(255,255,255,0.05);
+      padding: 10px;
+      border-radius: 8px;
+    }
+    .info-bar a { color: #fbc02d; text-decoration: none; font-weight: bold; }
+    .info-bar a:hover { text-decoration: underline; }
+
+    /* MENU SECTION */
+    section {
+      max-width: 1100px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+    h2 {
+      font-size: 2rem;
+      color: #fbc02d;
+      border-left: 5px solid #d32f2f;
+      padding-left: 15px;
+      margin-bottom: 25px;
+      text-transform: uppercase;
+    }
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .menu-item {
+      background: #1a1a1a;
+      border-radius: 12px;
+      padding: 15px;
+      border: 1px solid #333;
+      transition: 0.3s;
+    }
+    .menu-item:hover { border-color: #d32f2f; transform: translateY(-3px); }
+    .menu-item h3 { color: #fff; font-size: 1.1rem; margin-bottom: 5px; }
+    .menu-item .ingredients { color: #aaa; font-size: 0.85rem; margin-bottom: 10px; }
+    .menu-item .price { color: #fbc02d; font-size: 1.3rem; font-weight: bold; }
+    .badge { 
+      background: #d32f2f; 
+      color: #fff; 
+      font-size: 0.7rem; 
+      padding: 2px 8px; 
+      border-radius: 12px; 
+      display: inline-block;
+      margin-bottom: 5px;
+    }
+
+    /* SPECIAL MENUS */
+    .menu-combo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 15px;
+    }
+    .combo-item {
+      background: #1a1a1a;
+      border-radius: 12px;
+      text-align: center;
+      padding: 15px 10px;
+      border: 1px solid #b31b1b;
+    }
+    .combo-item h3 { font-size: 1rem; color: #fbc02d; }
+    .combo-item p { font-size: 0.8rem; color: #ccc; }
+    .combo-item .price { color: #fff; font-size: 1.2rem; font-weight: bold; margin-top: 5px; }
+
+    .footer {
+      text-align: center;
+      padding: 30px;
+      background: #0f0f0f;
+      border-top: 2px solid #d32f2f;
+      margin-top: 40px;
+    }
+    .footer .wa-btn {
+      display: inline-block;
+      background: #25D366;
+      color: #fff;
+      padding: 12px 30px;
+      border-radius: 30px;
+      font-weight: bold;
+      text-decoration: none;
+      margin-top: 15px;
+    }
+    .footer .wa-btn:hover { background: #20ba5c; }
+
+    @media (max-width: 600px) {
+      .brand h1 { font-size: 2.5rem; }
+      .menu-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <span class="crown">👑</span>
+  <div class="brand">
+    <h1>ROS <span>Kebab</span></h1>
+    <p>TACOS • PIZZERÍA</p>
+    <small style="display:block; color:#fbc02d; margin-top:4px;">SABOR QUE ENCANTA</small>
+  </div>
+  <div class="info-bar">
+    <span>📍 Calle Ceramistas Ros Nº 9, 46014</span>
+    <span>🕒 12:00-16:00 / 18:00-00:00</span>
+    <span>📞 <a href="tel:+34673035749">673 035 749</a> / <a href="tel:+34600703272">600 703 272</a></span>
+  </div>
+</header>
+
+<section>
+  <h2>🍕 Nuestras Pizzas</h2>
+  <div class="menu-grid" id="pizzaContainer"></div>
+</section>
+
+<section>
+  <h2>📦 Menús Combinados</h2>
+  <div class="menu-combo-grid" id="comboContainer"></div>
+</section>
+
+<section>
+  <h2>🌯 Durum, Pita & Platos</h2>
+  <div class="menu-grid" id="platoContainer"></div>
+</section>
+
+<div class="footer">
+  <h3>¡Haz tu pedido ahora!</h3>
+  <a class="wa-btn" href="https://wa.me/34673035749?text=Hola!%20Quiero%20pedir%20de%20Ros%20Kebab" target="_blank">📲 Pedir por WhatsApp</a>
+  <p style="margin-top:20px; color:#777; font-size:0.8rem;">© Ros Kebab Pizzeria 2026</p>
+</div>
+
+<script>
+  // ✏️ UPDATE THESE ARRAYS with your actual menu items from the photos
+  const pizzas = [
+    { name: "1. Margarita", ingredients: "Tomate, Mozzarella, Albahaca", price: "7.00€" },
+    { name: "2. Jamón y Queso", ingredients: "Tomate, Mozzarella, Jamón, Queso", price: "8.00€" },
+    { name: "3. 4 Quesos", ingredients: "Mozzarella, Gorgonzola, Parmesan, Queso de Cabra", price: "9.00€" },
+    { name: "4. Barbacoa", ingredients: "Carne, Cebolla, Salsa Barbacoa, Mozzarella", price: "9.00€" },
+    { name: "10. Carbonara", ingredients: "Nata, Bacon, Cebolla, Mozzarella, Huevo", price: "10.00€" },
+    // Add the remaining 23 pizzas here...
+  ];
+
+  const combos = [
+    { name: "MENU 1", desc: "Kebab + Bebida + Patatas", price: "7.00€" },
+    { name: "MENU 2", desc: "Kebab Mixto + Bebida + Patatas", price: "8.00€" },
+    { name: "MENU 4", desc: "Kebab Especial + Bebida + Patatas", price: "9.00€" },
+    { name: "MENU 8", desc: "Pizza + Bebida + Patatas", price: "12.00€" },
+    { name: "MENU 10", desc: "2 Pizzas Familiares", price: "17.00€" },
+    { name: "MENU 11", desc: "2 Pizzas + Bebida + Patatas", price: "19.00€" },
+    // Add the remaining menu combos here...
+  ];
+
+  const otros = [
+    { name: "Durum Kebab", ingredients: "Carne, Lechuga, Tomate, Cebolla, Salsa", price: "6.00€" },
+    { name: "Durum Mixto", ingredients: "Carne y Pollo, Lechuga, Tomate, Salsa", price: "7.00€" },
+    { name: "Pita Kebab", ingredients: "Carne, Lechuga, Tomate, Salsa", price: "5.00€" },
+    { name: "Plato Kebab", ingredients: "Carne, Ensalada y Patatas Fritas", price: "7.00€" },
+    { name: "Hamburguesa Normal", ingredients: "Carne, Lechuga, Tomate, Queso", price: "5.00€" },
+  ];
+
+  function renderItems(containerId, items, isCombo = false) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    
+    if (isCombo) {
+      container.innerHTML = items.map(item => `
+        <div class="combo-item">
+          <div class="badge">👑 Oferta</div>
+          <h3>${item.name}</h3>
+          <p>${item.desc}</p>
+          <div class="price">${item.price}</div>
+        </div>
+      `).join('');
+    } else {
+      container.innerHTML = items.map(item => `
+        <div class="menu-item">
+          <h3>${item.name}</h3>
+          <div class="ingredients">${item.ingredients}</div>
+          <div class="price">${item.price}</div>
+        </div>
+      `).join('');
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    renderItems('pizzaContainer', pizzas);
+    renderItems('comboContainer', combos, true);
+    renderItems('platoContainer', otros);
+  });
+</script>
+
+</body>
+</html>
