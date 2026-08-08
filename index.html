@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Ros Kebab - Pedidos Online</title>
+  <meta name="description" content="Pide online en Ros Kebab - Tacos, Kebab y Pizzería" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --primary: #c2410c;
+      --primary-dark: #9a3412;
+      --primary-light: #fff7ed;
+      --bg: #f8f9fa;
+      --card: #ffffff;
+      --text: #1a1a1a;
+      --text-muted: #6b7280;
+      --border: #e5e7eb;
+      --shadow: 0 4px 20px rgba(0,0,0,0.08);
+      --radius: 16px;
+      --header-h: 64px;
+      --bottom-h: 72px;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      min-height: 100dvh;
+      padding-bottom: calc(var(--bottom-h) + 16px);
+    }
+    .header {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      height: var(--header-h);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+    .logo {
+      display: flex; align-items: center; gap: 10px;
+      font-weight: 700; font-size: 1.05rem; color: var(--text); text-decoration: none;
+    }
+    .logo-icon {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      overflow: hidden;
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      border: 2px solid #c2410c;
+    }
+    .logo-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .logo-text { display: flex; flex-direction: column; line-height: 1.15; }
+    .logo-text small { font-size: 0.68rem; font-weight: 500; color: var(--text-muted); }
+    .icon-btn {
+      width: 42px; height: 42px; border: none; background: var(--bg);
+      border-radius: 12px; display: flex; align-items: center; justify-content: center;
+      cursor: pointer; position: relative;
+    }
+    .icon-btn:active { background: var(--border); }
+    .cart-badge {
+      position: absolute; top: 4px; right: 4px;
+      background: var(--primary); color: white;
+      font-size: 0.65rem; font-weight: 700;
+      min-width: 18px; height: 18px; border-radius: 9px;
+      display: flex; align-items: center; justify-content: center; padding: 0 4px;
+    }
+    .hero {
+      background: linear-gradient(135deg, #1a1a1a 0%, #2d1f14 50%, #1a1a1a 100%);
+      padding: 24px 16px 26px; text-align: center;
+      color: white;
+    }
+    .hero-logo {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      margin: 0 auto 14px;
+      overflow: hidden;
+      border: 3px solid #c2410c;
+      box-shadow: 0 6px 24px rgba(194, 65, 12, 0.4);
+    }
+    .hero-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .hero h1 { font-size: 1.4rem; font-weight: 700; margin-bottom: 4px; color: white; }
+    .hero p { color: #d1d5db; font-size: 0.85rem; margin-bottom: 6px; }
+    .hero .info { font-size: 0.78rem; color: #fb923c; font-weight: 500; margin-bottom: 14px; }
+    .search-box {
+      display: flex; align-items: center; background: white;
+      border-radius: 14px; padding: 0 14px; height: 46px;
+      box-shadow: var(--shadow); max-width: 480px; margin: 0 auto;
+    }
+    .search-box input {
+      flex: 1; border: none; outline: none; font-size: 0.95rem;
+      background: transparent; padding: 0 10px; color: var(--text);
+    }
+    .search-box input::placeholder { color: #9ca3af; }
+
+    .location-section {
+      padding: 16px 16px 8px;
+    }
+    .location-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    .map-container {
+      position: relative;
+      width: 100%;
+      height: 220px;
+      background: #e5e7eb;
+    }
+    .map-container iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+    }
+    .location-info {
+      padding: 14px 16px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .location-address {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.9rem;
+      color: var(--text);
+    }
+    .location-address svg {
+      flex-shrink: 0;
+      margin-top: 2px;
+      color: var(--primary);
+    }
+    .location-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .map-btn {
+      flex: 1;
+      min-width: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 11px 14px;
+      border-radius: 12px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: transform 0.15s, background 0.2s;
+    }
+    .map-btn:active { transform: scale(0.97); }
+    .map-btn.primary {
+      background: var(--primary);
+      color: white;
+    }
+    .map-btn.primary:active { background: var(--primary-dark); }
+    .map-btn.secondary {
+      background: var(--bg);
+      color: var(--text);
+      border: 1.5px solid var(--border);
+    }
+
+    .categories {
+      padding: 14px 0 6px; overflow-x: auto; -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .categories::-webkit-scrollbar { display: none; }
+    .categories-inner {
+      display: flex; gap: 8px; padding: 0 16px; width: max-content;
+    }
+    .cat-btn {
+      flex-shrink: 0; padding: 9px 16px; border-radius: 50px;
+      border: 1.5px solid var(--border); background: white;
+      font-size: 0.84rem; font-weight: 500; color: var(--text);
+      cursor: pointer; white-space: nowrap;
+    }
+    .cat-btn.active {
+      background: var(--primary); border-color: var(--primary); color: white;
+    }
+    .cat-btn:active { transform: scale(0.96); }
+    .menu-section { padding: 6px 16px 24px; }
+    .section-title {
+      font-size: 1.1rem; font-weight: 700; margin: 18px 0 10px; color: var(--text);
+    }
+    .menu-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+    .menu-card {
+      background: var(--card); border-radius: var(--radius);
+      overflow: hidden; box-shadow: var(--shadow);
+      display: flex; flex-direction: column;
+    }
+    .menu-card:active { transform: scale(0.985); }
+    .card-img {
+      width: 100%; height: 150px; object-fit: cover; background: #f3f4f6;
+    }
+    .card-body {
+      padding: 12px 14px 14px; display: flex; flex-direction: column; gap: 4px; flex: 1;
+    }
+    .card-title { font-size: 1rem; font-weight: 600; }
+    .card-desc {
+      font-size: 0.8rem; color: var(--text-muted);
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .card-footer {
+      display: flex; align-items: center; justify-content: space-between; margin-top: 10px;
+    }
+    .price { font-size: 1.1rem; font-weight: 700; color: var(--primary); }
+    .add-btn {
+      width: 38px; height: 38px; border-radius: 11px; border: none;
+      background: var(--primary); color: white; font-size: 1.25rem; font-weight: 600;
+      display: flex; align-items: center; justify-content: center; cursor: pointer;
+    }
+    .add-btn:active { background: var(--primary-dark); transform: scale(0.92); }
+    .bottom-bar {
+      position: fixed; bottom: 0; left: 0; right: 0; height: var(--bottom-h);
+      background: white; border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 16px; z-index: 90; box-shadow: 0 -4px 20px rgba(0,0,0,0.06);
+    }
+    .cart-info { display: flex; flex-direction: column; }
+    .cart-info .label { font-size: 0.75rem; color: var(--text-muted); }
+    .cart-info .total { font-size: 1.15rem; font-weight: 700; }
+    .checkout-btn {
+      background: var(--primary); color: white; border: none; border-radius: 14px;
+      padding: 13px 24px; font-size: 0.95rem; font-weight: 600;
+      cursor: pointer; display: flex; align-items: center; gap: 8px;
+    }
+    .checkout-btn:active { background: var(--primary-dark); }
+    .checkout-btn:disabled { background: #d1d5db; cursor: not-allowed; }
+    .overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 200;
+      opacity: 0; visibility: hidden; transition: all 0.3s;
+    }
+    .overlay.open { opacity: 1; visibility: visible; }
+    .cart-drawer {
+      position: fixed; bottom: 0; left: 0; right: 0; max-height: 85dvh;
+      background: white; border-radius: 24px 24px 0 0; z-index: 210;
+      transform: translateY(100%);
+      transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+      display: flex; flex-direction: column;
+    }
+    .cart-drawer.open { transform: translateY(0); }
+    .drawer-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 18px 10px; border-bottom: 1px solid var(--border);
+    }
+    .drawer-header h2 { font-size: 1.15rem; font-weight: 700; }
+    .close-btn {
+      width: 34px; height: 34px; border-radius: 50%; border: none;
+      background: var(--bg); font-size: 1.1rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .cart-items {
+      flex: 1; overflow-y: auto; padding: 10px 16px; -webkit-overflow-scrolling: touch;
+    }
+    .cart-item {
+      display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border);
+    }
+    .cart-item:last-child { border-bottom: none; }
+    .cart-item-img {
+      width: 60px; height: 60px; border-radius: 10px; object-fit: cover; background: #f3f4f6; flex-shrink: 0;
+    }
+    .cart-item-info { flex: 1; min-width: 0; }
+    .cart-item-name { font-weight: 600; font-size: 0.92rem; }
+    .cart-item-price { color: var(--primary); font-weight: 600; font-size: 0.88rem; }
+    .qty-controls { display: flex; align-items: center; gap: 10px; margin-top: 6px; }
+    .qty-btn {
+      width: 28px; height: 28px; border-radius: 8px; border: 1.5px solid var(--border);
+      background: white; font-size: 1rem; font-weight: 600;
+      display: flex; align-items: center; justify-content: center; cursor: pointer;
+    }
+    .qty-value { font-weight: 600; min-width: 18px; text-align: center; }
+    .drawer-footer {
+      padding: 14px 18px 26px; border-top: 1px solid var(--border); background: white;
+    }
+    .total-row {
+      display: flex; justify-content: space-between; margin-bottom: 14px;
+      font-size: 1.1rem; font-weight: 700;
+    }
+    .empty-cart { text-align: center; padding: 40px 20px; color: var(--text-muted); }
+    .empty-cart svg { margin-bottom: 10px; opacity: 0.4; }
+    .toast {
+      position: fixed; bottom: calc(var(--bottom-h) + 16px); left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: #1f2937; color: white; padding: 11px 18px; border-radius: 12px;
+      font-size: 0.88rem; font-weight: 500; z-index: 300;
+      opacity: 0; visibility: hidden; transition: all 0.3s; white-space: nowrap; max-width: 90vw;
+    }
+    .toast.show {
+      opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0);
+    }
+
+    /* ADMIN */
+    .admin-bar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 150;
+      background: #1f2937; color: white;
+      padding: 10px 16px;
+      display: none; align-items: center; justify-content: space-between;
+      font-size: 0.88rem; font-weight: 600;
+    }
+    .admin-bar.visible { display: flex; }
+    body.admin-mode { padding-top: 44px; }
+    body.admin-mode .header { top: 44px; }
+    .admin-bar button {
+      background: #ef4444; color: white; border: none;
+      padding: 6px 12px; border-radius: 8px; font-size: 0.8rem;
+      font-weight: 600; cursor: pointer;
+    }
+    .price-edit {
+      display: flex; align-items: center; gap: 6px;
+    }
+    .price-edit input {
+      width: 70px; padding: 6px 8px; border: 2px solid var(--primary);
+      border-radius: 8px; font-size: 0.95rem; font-weight: 700;
+      color: var(--primary); text-align: right;
+    }
+    .price-edit button {
+      background: #16a34a; color: white; border: none;
+      width: 32px; height: 32px; border-radius: 8px; font-size: 0.9rem;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+    }
+    .admin-login-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 400;
+      display: none; align-items: center; justify-content: center; padding: 20px;
+    }
+    .admin-login-overlay.open { display: flex; }
+    .admin-login-box {
+      background: white; border-radius: 20px; padding: 28px 24px;
+      width: 100%; max-width: 320px; text-align: center;
+    }
+    .admin-login-box h3 { margin-bottom: 8px; font-size: 1.2rem; }
+    .admin-login-box p { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 18px; }
+    .admin-login-box input {
+      width: 100%; padding: 14px; border: 1.5px solid var(--border);
+      border-radius: 12px; font-size: 1.3rem; text-align: center;
+      letter-spacing: 8px; margin-bottom: 14px;
+    }
+    .admin-login-box .login-btns { display: flex; gap: 10px; }
+    .admin-login-box button {
+      flex: 1; padding: 12px; border: none; border-radius: 12px;
+      font-weight: 600; font-size: 0.95rem; cursor: pointer;
+    }
+    .admin-login-box .btn-enter { background: var(--primary); color: white; }
+    .admin-login-box .btn-cancel { background: var(--bg); color: var(--text); }
+    .secret-tap {
+      position: fixed; bottom: 90px; left: 12px; width: 28px; height: 28px;
+      opacity: 0; z-index: 5;
+    }
+
+    @media (min-width: 640px) {
+      .menu-grid { grid-template-columns: repeat(2, 1fr); }
+      .card-img { height: 170px; }
+      .map-container { height: 280px; }
+      .hero-logo { width: 150px; height: 150px; }
+    }
+    @media (min-width: 900px) {
+      body { padding-bottom: 0; }
+      .header { padding: 0 28px; }
+      .hero { padding: 28px 28px 36px; }
+      .categories-inner, .menu-section, .location-section {
+        max-width: 1100px; margin: 0 auto; padding-left: 28px; padding-right: 28px;
+      }
+      .menu-grid { grid-template-columns: repeat(3, 1fr); gap: 18px; }
+      .map-container { height: 320px; }
+      .bottom-bar {
+        max-width: 460px; left: auto; right: 24px; bottom: 24px;
+        border-radius: 18px; border: 1px solid var(--border);
+        box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+      }
+      .cart-drawer {
+        left: auto; right: 0; width: 400px; max-height: 100dvh; border-radius: 0; height: 100%;
+      }
+    }
+    @supports (padding: max(0px)) {
+      .bottom-bar {
+        padding-bottom: max(0px, env(safe-area-inset-bottom));
+        height: calc(var(--bottom-h) + env(safe-area-inset-bottom));
+      }
+      .drawer-footer {
+        padding-bottom: max(26px, calc(14px + env(safe-area-inset-bottom)));
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <a href="#" class="logo">
+      <div class="logo-icon">
+        <img src="logo.jpg" alt="Ros Kebab Logo" />
+      </div>
+      <div class="logo-text">
+        <span>Ros Kebab</span>
+        <small>Tacos · Kebab · Pizzería</small>
+      </div>
+    </a>
+    <button class="icon-btn" id="cartIconBtn" aria-label="Ver carrito">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/><path d="M6 6L5 3H2"/>
+      </svg>
+      <span class="cart-badge" id="cartBadge" style="display:none">0</span>
+    </button>
+  </header>
+
+  <section class="hero">
+    <div class="hero-logo">
+      <img src="logo.jpg" alt="Ros Kebab - Tacos en Pizzería" />
+    </div>
+    <h1>Pedidos Online</h1>
+    <p>Calle Ceramistas Ros 4 · 46014 Valencia</p>
+    <div class="info">📞 673 035 749 · 600 703 272 &nbsp;|&nbsp; ⏰ 12:00-16:00 / 18:00-00:00</div>
+    <div class="search-box">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2">
+        <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+      </svg>
+      <input type="text" id="searchInput" placeholder="Buscar kebabs, pizzas, menús..." />
+    </div>
+  </section>
+
+  <!-- Google Maps Location -->
+  <section class="location-section">
+    <div class="location-card">
+      <div class="map-container">
+        <iframe
+          src="https://maps.google.com/maps?q=Carrer+del+Ceramista+Ros+4,+46014+Val%C3%A8ncia,+Spain&hl=es&z=16&output=embed"
+          allowfullscreen=""
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          title="Ubicación Ros Kebab">
+        </iframe>
+      </div>
+      <div class="location-info">
+        <div class="location-address">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+            <circle cx="12" cy="10" r="3"/>
+          </svg>
+          <div>
+            <strong>Ros Kebab</strong><br>
+            Carrer del Ceramista Ros, 4<br>
+            46014 València (Patraix)
+          </div>
+        </div>
+        <div class="location-actions">
+          <a class="map-btn primary"
+             href="https://www.google.com/maps/dir/?api=1&destination=Carrer+del+Ceramista+Ros+4,+46014+Valencia"
+             target="_blank"
+             rel="noopener noreferrer">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path d="M3 11l19-9-9 19-2-8-8-2z"/>
+            </svg>
+            Cómo llegar
+          </a>
+          <a class="map-btn secondary"
+             href="https://www.google.com/maps/search/?api=1&query=Carrer+del+Ceramista+Ros+4,+46014+Valencia"
+             target="_blank"
+             rel="noopener noreferrer">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+            Ver en Maps
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="categories">
+    <div class="categories-inner" id="categories">
+      <button class="cat-btn active" data-cat="all">Todos</button>
+      <button class="cat-btn" data-cat="menus">Menús</button>
+      <button class="cat-btn" data-cat="pita">Pita / Kebab</button>
+      <button class="cat-btn" data-cat="durum">Durum</button>
+      <button class="cat-btn" data-cat="platos">Platos</button>
+      <button class="cat-btn" data-cat="hamburguesas">Hamburguesas</button>
+      <button class="cat-btn" data-cat="pizzas">Pizzas</button>
+      <button class="cat-btn" data-cat="tapas">Tapas</button>
+      <button class="cat-btn" data-cat="bebidas">Bebidas</button>
+    </div>
+  </div>
+
+  <main class="menu-section" id="menu"></main>
+
+  <div class="bottom-bar">
+    <div class="cart-info">
+      <span class="label" id="itemCount">0 productos</span>
+      <span class="total" id="cartTotal">0,00 €</span>
+    </div>
+    <button class="checkout-btn" id="checkoutBtn" disabled>
+      Ver carrito
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <path d="M5 12h14M12 5l7 7-7 7"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="overlay" id="overlay"></div>
+  <div class="cart-drawer" id="cartDrawer">
+    <div class="drawer-header">
+      <h2>Tu pedido</h2>
+      <button class="close-btn" id="closeCart">✕</button>
+    </div>
+    <div class="cart-items" id="cartItems">
+      <div class="empty-cart">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/><path d="M6 6L5 3H2"/>
+        </svg>
+        <p>Tu carrito está vacío</p>
+      </div>
+    </div>
+    <div class="drawer-footer">
+      <div class="total-row">
+        <span>Total</span>
+        <span id="drawerTotal">0,00 €</span>
+      </div>
+      <button class="checkout-btn" style="width:100%; justify-content:center;" id="placeOrderBtn">
+        Realizar pedido
+      </button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <!-- Admin bar -->
+  <div class="admin-bar" id="adminBar">
+    <span>✏️ Modo Admin — Edita precios</span>
+    <button onclick="exitAdmin()">Salir</button>
+  </div>
+
+  <!-- Admin login -->
+  <div class="admin-login-overlay" id="adminLogin">
+    <div class="admin-login-box">
+      <h3>🔒 Admin</h3>
+      <p>Introduce el PIN para editar precios</p>
+      <input type="password" id="adminPin" maxlength="6" inputmode="numeric" placeholder="••••" />
+      <div class="login-btns">
+        <button class="btn-cancel" onclick="closeAdminLogin()">Cancelar</button>
+        <button class="btn-enter" onclick="tryAdminLogin()">Entrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Secret tap zone (bottom-left corner) to open admin -->
+  <div class="secret-tap" id="secretTap"></div>
+
+  <script>
+    const menuItems = [
+      // MENÚS
+      { id: 1, name: "Menú 1 - Kebab Carne", desc: "1 Kebab Carne + Patatas Fritas + Bebida 33cl", price: 7.00, category: "menus", img: "https://images.unsplash.com/photo-1529006558751-67a30eac3b7a?w=400&h=300&fit=crop" },
+      { id: 2, name: "Menú 2 - Durum Carne", desc: "1 Durum Carne + Patatas Fritas + Bebida 33cl", price: 7.00, category: "menus", img: "https://images.unsplash.com/photo-1599487488170-d11ec9c172f3?w=400&h=300&fit=crop" },
+      { id: 3, name: "Menú 3 - Plato Kebab", desc: "Plato Kebab con Patatas + Bebida 33cl", price: 8.00, category: "menus", img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&h=300&fit=crop" },
+      { id: 4, name: "Menú 4 - Hamburguesa", desc: "1 Hamburguesa + Patatas Fritas + Bebida 33cl", price: 7.00, category: "menus", img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&h=300&fit=crop" },
+      { id: 5, name: "Menú 5 - Pizza Mediana", desc: "1 Pizza Mediana + Bebida 1L", price: 7.00, category: "menus", img: "https://images.unsplash.com/photo-1574071318508-1cdbab80d264?w=400&h=300&fit=crop" },
+      { id: 6, name: "Menú 6 - 3 Kebabs Ternera", desc: "3 Kebabs Ternera + Patatas Fritas + Bebida 1L", price: 15.00, category: "menus", img: "https://images.unsplash.com/photo-1529006558751-67a30eac3b7a?w=400&h=300&fit=crop" },
+      { id: 7, name: "Menú 7 - 4 Kebabs Ternera", desc: "4 Kebabs Ternera + Patatas Fritas + Bebida 1L", price: 17.00, category: "menus", img: "https://images.unsplash.com/photo-1529006558751-67a30eac3b7a?w=400&h=300&fit=crop" },
+      { id: 8, name: "Menú 8 - 2 Kebabs + 1 Durum", desc: "2 Kebabs + 1 Durum + Patatas + Bebida 1L", price: 15.00, category: "menus", img: "https://images.unsplash.com/photo-1599487488170-d11ec9c172f3?w=400&h=300&fit=crop" },
+      { id: 9, name: "Menú 9 - Pizza Familiar", desc: "1 Pizza Familiar + Bebida 1L", price: 17.00, category: "menus", img: "https://images.unsplash.com/photo-1628840042765-356cda07504e?w=400&h=300&fit=crop" },
+      { id: 10, name: "Menú 10 - 2 Pizzas Medianas", desc: "2 Pizzas Medianas + Patatas + Bebida 1L", price: 17.00, category: "menus", img: "https://images.unsplash.com/photo-1574071318508-1cdbab80d264?w=400&h=300&fit=crop" },
+      { id: 11, name: "Menú 11 - 2 Pizzas Grandes", desc: "2 Pizzas Grandes + Patatas + Bebida 1L", price: 25.00, category: "menus", img: "https://images.unsplash.com/photo-1628840042765-356cda07504e?w=400&h=300&fit=crop" },
+      { id: 12, name: "Menú 12 - 2 Pizzas Familiares", desc: "2 Pizzas Familiares + Patatas 1L", price: 30.00, category: "menus", img: "https://images.unsplash.com/photo-1628840042765-356cda07504e?w=400&h=300&fit=crop" },
+
+      // PITA / KEBAB
+      { id: 20, name: "Doner Kebab Normal", desc: "Pan, Carne Ternera/Pollo/Mixto, Ensalada y Salsa", price: 5.00, category: "pita", img: "https://images.unsplash.com/photo-1529006558751-67a30eac3b7a?w=400&h=300&fit=crop" },
+      { id: 21, name: "Doner Kebab Solo Carne", desc: "Pan, Carne Ternera y Salsa (+0,50€ si es Pollo)", price: 5.00, category: "pita", img: "https://images.unsplash.com/photo-1529006558751-67a30eac3b7a?w=400&h=300&fit=crop" },
+      { id: 22, name: "Doner Kebab con Queso", desc: "Pan, Carne, Queso, Ensalada y Salsa", price: 6.00, category: "pita", img: "https://images.unsplash.com/photo-1529006558751-67a30eac3b7a?w=400&h=300&fit=crop" },
+      { id: 23, name: "Doner Kebab Vegetal", desc: "Pan, Falafel, Ensalada y Salsa", price: 5.00, category: "pita", img: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=300&fit=crop" },
+      { id: 24, name: "Doner Kebab Solo Carne + Patatas", desc: "Pan, Carne, Patatas y Salsa", price: 6.00, category: "pita", img: "https://images.unsplash.com/photo-1529006558751-67a30eac3b7a?w=400&h=300&fit=crop" },
+      { id: 25, name: "Doner Kebab Especial", desc: "Pan, Carne Ternera, Ensalada y Salsa", price: 6.00, category: "pita", img: "https://images.unsplash.com/photo-1529006558751-67a30eac3b7a?w=400&h=300&fit=crop" },
+
+      // DURUM
+      { id: 30, name: "Durum Normal", desc: "Pan, Carne Ternera/Pollo/Mixto, Ensalada y Salsa", price: 5.00, category: "durum", img: "https://images.unsplash.com/photo-1599487488170-d11ec9c172f3?w=400&h=300&fit=crop" },
+      { id: 31, name: "Durum Solo Carne", desc: "Pan, Carne Ternera y Salsa (+0,50€ si es Pollo)", price: 5.00, category: "durum", img: "https://images.unsplash.com/photo-1599487488170-d11ec9c172f3?w=400&h=300&fit=crop" },
+      { id: 32, name: "Durum con Queso", desc: "Pan, Carne, Queso, Ensalada y Salsa", price: 6.00, category: "durum", img: "https://images.unsplash.com/photo-1599487488170-d11ec9c172f3?w=400&h=300&fit=crop" },
+      { id: 33, name: "Durum Vegetal", desc: "Pan, Falafel, Ensalada y Salsa", price: 5.00, category: "durum", img: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=300&fit=crop" },
+      { id: 34, name: "Durum Solo Carne + Patatas", desc: "Pan, Carne, Patatas y Salsa", price: 6.00, category: "durum", img: "https://images.unsplash.com/photo-1599487488170-d11ec9c172f3?w=400&h=300&fit=crop" },
+      { id: 35, name: "Durum Especial", desc: "Pan, Carne Ternera, Ensalada y Salsa", price: 6.00, category: "durum", img: "https://images.unsplash.com/photo-1599487488170-d11ec9c172f3?w=400&h=300&fit=crop" },
+
+      // PLATOS
+      { id: 40, name: "Plato Kebab", desc: "Carne, Ensalada y Patatas Fritas", price: 7.00, category: "platos", img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&h=300&fit=crop" },
+      { id: 41, name: "Plato con Queso", desc: "Carne, Queso, Ensalada y Patatas Fritas", price: 8.00, category: "platos", img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&h=300&fit=crop" },
+      { id: 42, name: "Plato Vegetariano", desc: "Falafel, Ensalada y Patatas Fritas", price: 6.50, category: "platos", img: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=300&fit=crop" },
+      { id: 43, name: "Plato Solo Carne con Patatas", desc: "Carne, Ensalada y Patatas Fritas", price: 8.50, category: "platos", img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&h=300&fit=crop" },
+      { id: 44, name: "Plato Patatas al Horno", desc: "Patatas al horno con Bacon y Queso", price: 6.00, category: "platos", img: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=400&h=300&fit=crop" },
+
+      // HAMBURGUESAS
+      { id: 50, name: "Hamburguesa Normal", desc: "Lechuga, Tomate, Pollo o Ternera, Huevo, Queso", price: 5.00, category: "hamburguesas", img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&h=300&fit=crop" },
+
+      // PIZZAS
+      { id: 60, name: "Pizza Margarita", desc: "Tomate, Queso y Orégano · N 8€ / G 10€ / F 15€", price: 8.00, category: "pizzas", img: "https://images.unsplash.com/photo-1574071318508-1cdbab80d264?w=400&h=300&fit=crop" },
+      { id: 61, name: "Pizza Vegetariana", desc: "Pimiento, Cebolla, Champiñones, Aceitunas · N 8€ / G 10€ / F 15€", price: 8.00, category: "pizzas", img: "https://images.unsplash.com/photo-1511689660979-10d2ca3a2c40?w=400&h=300&fit=crop" },
+      { id: 62, name: "Pizza Mexicana", desc: "Carne Picada, Champiñones · N 8€ / G 10€ / F 15€", price: 8.00, category: "pizzas", img: "https://images.unsplash.com/photo-1628840042765-356cda07504e?w=400&h=300&fit=crop" },
+      { id: 63, name: "Pizza Hawaiana", desc: "Jamón y Piña · N 8€ / G 10€ / F 15€", price: 8.00, category: "pizzas", img: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&h=300&fit=crop" },
+      { id: 64, name: "Pizza Caprichosa", desc: "Jamón, Champiñones, Aceitunas · N 8€ / G 10€ / F 15€", price: 8.00, category: "pizzas", img: "https://images.unsplash.com/photo-1628840042765-356cda07504e?w=400&h=300&fit=crop" },
+      { id: 65, name: "Pizza Atún", desc: "Atún, Cebolla, Aceitunas · N 8€ / G 10€ / F 15€", price: 8.00, category: "pizzas", img: "https://images.unsplash.com/photo-1574071318508-1cdbab80d264?w=400&h=300&fit=crop" },
+      { id: 66, name: "Pizza 4 Quesos", desc: "4 Quesos y Orégano · N 8€ / G 10€ / F 15€", price: 8.00, category: "pizzas", img: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&h=300&fit=crop" },
+      { id: 67, name: "Pizza Barbacoa", desc: "Carne y Salsa Barbacoa · N 8€ / G 10€ / F 15€", price: 8.00, category: "pizzas", img: "https://images.unsplash.com/photo-1628840042765-356cda07504e?w=400&h=300&fit=crop" },
+      { id: 68, name: "Pizza Barbacoa Tex", desc: "Pollo, Ternera y Salsa Barbacoa · N 8€ / G 10€ / F 15€", price: 8.00, category: "pizzas", img: "https://images.unsplash.com/photo-1628840042765-356cda07504e?w=400&h=300&fit=crop" },
+      { id: 69, name: "Pizza Super Pizza", desc: "Pollo, Bacon, Carne Picada, Champiñones · N 8€ / G 10€ / F 15€", price: 8.00, category: "pizzas", img: "https://images.unsplash.com/photo-1628840042765-356cda07504e?w=400&h=300&fit=crop" },
+      { id: 70, name: "Pizza Carbonara", desc: "Bacon, Huevo, Cebolla · N 8€ / G 10€ / F 15€", price: 8.00, category: "pizzas", img: "https://images.unsplash.com/photo-1574071318508-1cdbab80d264?w=400&h=300&fit=crop" },
+      { id: 71, name: "Pizza Doner Kebab", desc: "Carne Asada, Ajo y Cebolla · N 8€ / G 10€ / F 15€", price: 8.00, category: "pizzas", img: "https://images.unsplash.com/photo-1529006558751-67a30eac3b7a?w=400&h=300&fit=crop" },
+      { id: 72, name: "Pizza Pepperoni", desc: "Salami, Champiñones, Pepperoni · N 8€ / G 10€ / F 15€", price: 8.00, category: "pizzas", img: "https://images.unsplash.com/photo-1628840042765-356cda07504e?w=400&h=300&fit=crop" },
+      { id: 73, name: "Pizza Picante", desc: "Chorizo Picante, Olivas Negras · N 8€ / G 10€ / F 15€", price: 8.00, category: "pizzas", img: "https://images.unsplash.com/photo-1628840042765-356cda07504e?w=400&h=300&fit=crop" },
+      { id: 74, name: "Pizza Al Gusto", desc: "Tomate, Queso + 2 ingredientes a elegir · N 8€ / G 10€ / F 15€", price: 8.00, category: "pizzas", img: "https://images.unsplash.com/photo-1574071318508-1cdbab80d264?w=400&h=300&fit=crop" },
+
+      // TAPAS
+      { id: 80, name: "Patatas Bravas / Deluxe", desc: "Ración de patatas bravas o deluxe", price: 4.50, category: "tapas", img: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=400&h=300&fit=crop" },
+      { id: 81, name: "Patatas Fritas", desc: "Ración de patatas fritas", price: 3.00, category: "tapas", img: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=400&h=300&fit=crop" },
+      { id: 82, name: "Doner Box", desc: "Carne Pollo o Ternera con patatas", price: 5.00, category: "tapas", img: "https://images.unsplash.com/photo-1529006558751-67a30eac3b7a?w=400&h=300&fit=crop" },
+      { id: 83, name: "Croquetas (6 uds)", desc: "6 croquetas caseras", price: 4.50, category: "tapas", img: "https://images.unsplash.com/photo-1604908176997-431630bcf43c?w=400&h=300&fit=crop" },
+      { id: 84, name: "Alitas de Pollo (6 uds)", desc: "6 alitas de pollo", price: 6.00, category: "tapas", img: "https://images.unsplash.com/photo-1527477396000-e27173b57583?w=400&h=300&fit=crop" },
+      { id: 85, name: "Falafel (6 uds)", desc: "6 unidades de falafel", price: 5.00, category: "tapas", img: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=300&fit=crop" },
+      { id: 86, name: "Nuggets de Pollo (6 uds)", desc: "6 nuggets de pollo", price: 6.00, category: "tapas", img: "https://images.unsplash.com/photo-1562967914-608f82629710?w=400&h=300&fit=crop" },
+      { id: 87, name: "Finger de Pollo (6 uds)", desc: "6 fingers de pollo", price: 6.00, category: "tapas", img: "https://images.unsplash.com/photo-1562967914-608f82629710?w=400&h=300&fit=crop" },
+      { id: 88, name: "Finger de Queso (6 uds)", desc: "6 fingers de queso", price: 6.00, category: "tapas", img: "https://images.unsplash.com/photo-1548340748-6d2b7d7da280?w=400&h=300&fit=crop" },
+      { id: 89, name: "Aros de Cebolla", desc: "Ración de aros de cebolla", price: 6.00, category: "tapas", img: "https://images.unsplash.com/photo-1639024471283-035266509383?w=400&h=300&fit=crop" },
+      { id: 90, name: "Jalapeños", desc: "Ración de jalapeños rellenos", price: 6.00, category: "tapas", img: "https://images.unsplash.com/photo-1604908176997-431630bcf43c?w=400&h=300&fit=crop" },
+      { id: 91, name: "Calamares", desc: "Ración de calamares", price: 6.00, category: "tapas", img: "https://images.unsplash.com/photo-1599487488170-d11ec9c172f3?w=400&h=300&fit=crop" },
+      { id: 92, name: "Durum Gratinado", desc: "Durum gratinado al horno", price: 7.00, category: "tapas", img: "https://images.unsplash.com/photo-1599487488170-d11ec9c172f3?w=400&h=300&fit=crop" },
+      { id: 93, name: "Plato Gratinado", desc: "Plato gratinado", price: 5.00, category: "tapas", img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&h=300&fit=crop" },
+      { id: 94, name: "Taco", desc: "Taco especial", price: 9.00, category: "tapas", img: "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=400&h=300&fit=crop" },
+
+      // BEBIDAS
+      { id: 100, name: "Refresco 33cl", desc: "Coca-Cola, Fanta, Sprite...", price: 1.50, category: "bebidas", img: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=400&h=300&fit=crop" },
+      { id: 101, name: "Refresco 1L", desc: "Botella 1 litro", price: 2.50, category: "bebidas", img: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=400&h=300&fit=crop" },
+      { id: 102, name: "Refresco 2L", desc: "Botella 2 litros", price: 3.00, category: "bebidas", img: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=400&h=300&fit=crop" },
+      { id: 103, name: "Agua Mineral", desc: "Botella de agua", price: 1.20, category: "bebidas", img: "https://images.unsplash.com/photo-1548832337-c20868dd4273?w=400&h=300&fit=crop" }
+    ];
+
+    let cart = {};
+    let currentCategory = "all";
+    let searchQuery = "";
+    let isAdmin = false;
+    const ADMIN_PIN = "7861"; // PIN de admin
+
+    // Load custom prices from localStorage
+    (function loadSavedPrices() {
+      try {
+        const saved = JSON.parse(localStorage.getItem("ros_prices") || "{}");
+        menuItems.forEach(item => {
+          if (saved[item.id] !== undefined) item.price = saved[item.id];
+        });
+      } catch(e) {}
+    })();
+
+    function savePrices() {
+      const data = {};
+      menuItems.forEach(item => { data[item.id] = item.price; });
+      localStorage.setItem("ros_prices", JSON.stringify(data));
+    }
+
+    const catNames = {
+      menus: "Menús",
+      pita: "Pita / Kebab",
+      durum: "Durum",
+      platos: "Platos",
+      hamburguesas: "Hamburguesas",
+      pizzas: "Pizzas",
+      tapas: "Tapas",
+      bebidas: "Bebidas"
+    };
+
+    function formatPrice(n) {
+      return n.toFixed(2).replace('.', ',') + ' €';
+    }
+
+    function renderMenu() {
+      const container = document.getElementById("menu");
+      let filtered = menuItems;
+      if (currentCategory !== "all") filtered = filtered.filter(i => i.category === currentCategory);
+      if (searchQuery) {
+        const q = searchQuery.toLowerCase();
+        filtered = filtered.filter(i => i.name.toLowerCase().includes(q) || i.desc.toLowerCase().includes(q));
+      }
+      if (filtered.length === 0) {
+        container.innerHTML = `<div style="text-align:center;padding:48px 16px;color:#6b7280;"><p>No se encontraron productos</p></div>`;
+        return;
+      }
+      if (currentCategory === "all" && !searchQuery) {
+        const groups = {};
+        filtered.forEach(item => {
+          if (!groups[item.category]) groups[item.category] = [];
+          groups[item.category].push(item);
+        });
+        let html = "";
+        for (const [cat, items] of Object.entries(groups)) {
+          html += `<h2 class="section-title">${catNames[cat] || cat}</h2>`;
+          html += `<div class="menu-grid">${items.map(cardHTML).join("")}</div>`;
+        }
+        container.innerHTML = html;
+      } else {
+        container.innerHTML = `<div class="menu-grid">${filtered.map(cardHTML).join("")}</div>`;
+      }
+    }
+
+    function cardHTML(item) {
+      const pricePart = isAdmin
+        ? `<div class="price-edit">
+             <input type="number" step="0.10" min="0" value="${item.price.toFixed(2)}" id="price-${item.id}" />
+             <button onclick="savePrice(${item.id})" title="Guardar">✓</button>
+           </div>`
+        : `<span class="price">${formatPrice(item.price)}</span>
+           <button class="add-btn" onclick="addToCart(${item.id})" aria-label="Añadir ${item.name}">+</button>`;
+
+      return `
+        <article class="menu-card">
+          <img class="card-img" src="${item.img}" alt="${item.name}" loading="lazy" onerror="this.src='https://placehold.co/400x300/f3f4f6/9ca3af?text=Ros+Kebab'"/>
+          <div class="card-body">
+            <h3 class="card-title">${item.name}</h3>
+            <p class="card-desc">${item.desc}</p>
+            <div class="card-footer">
+              ${pricePart}
+            </div>
+          </div>
+        </article>
+      `;
+    }
+
+    function savePrice(id) {
+      const input = document.getElementById("price-" + id);
+      if (!input) return;
+      const val = parseFloat(input.value);
+      if (isNaN(val) || val < 0) {
+        showToast("Precio no válido");
+        return;
+      }
+      const item = menuItems.find(i => i.id === id);
+      if (item) {
+        item.price = Math.round(val * 100) / 100;
+        savePrices();
+        showToast("Precio guardado ✓");
+        renderMenu();
+      }
+    }
+
+    function enterAdmin() {
+      isAdmin = true;
+      document.body.classList.add("admin-mode");
+      document.getElementById("adminBar").classList.add("visible");
+      closeAdminLogin();
+      renderMenu();
+      showToast("Modo admin activado");
+    }
+
+    function exitAdmin() {
+      isAdmin = false;
+      document.body.classList.remove("admin-mode");
+      document.getElementById("adminBar").classList.remove("visible");
+      renderMenu();
+      showToast("Modo admin cerrado");
+    }
+
+    function openAdminLogin() {
+      document.getElementById("adminLogin").classList.add("open");
+      document.getElementById("adminPin").value = "";
+      setTimeout(() => document.getElementById("adminPin").focus(), 100);
+    }
+
+    function closeAdminLogin() {
+      document.getElementById("adminLogin").classList.remove("open");
+    }
+
+    function tryAdminLogin() {
+      const pin = document.getElementById("adminPin").value.trim();
+      if (pin === ADMIN_PIN) {
+        enterAdmin();
+      } else {
+        showToast("PIN incorrecto");
+        document.getElementById("adminPin").value = "";
+      }
+    }
+
+    function addToCart(id) {
+      cart[id] = (cart[id] || 0) + 1;
+      updateCartUI();
+      showToast("Añadido al carrito ✓");
+    }
+
+    function changeQty(id, delta) {
+      cart[id] = (cart[id] || 0) + delta;
+      if (cart[id] <= 0) delete cart[id];
+      updateCartUI();
+    }
+
+    function updateCartUI() {
+      const totalItems = Object.values(cart).reduce((a, b) => a + b, 0);
+      const totalPrice = Object.entries(cart).reduce((sum, [id, qty]) => {
+        const item = menuItems.find(i => i.id == id);
+        return sum + (item ? item.price * qty : 0);
+      }, 0);
+      const badge = document.getElementById("cartBadge");
+      if (totalItems > 0) {
+        badge.style.display = "flex";
+        badge.textContent = totalItems;
+      } else {
+        badge.style.display = "none";
+      }
+      document.getElementById("itemCount").textContent = totalItems === 1 ? "1 producto" : `${totalItems} productos`;
+      document.getElementById("cartTotal").textContent = formatPrice(totalPrice);
+      document.getElementById("checkoutBtn").disabled = totalItems === 0;
+      document.getElementById("drawerTotal").textContent = formatPrice(totalPrice);
+      const container = document.getElementById("cartItems");
+      if (totalItems === 0) {
+        container.innerHTML = `
+          <div class="empty-cart">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/><path d="M6 6L5 3H2"/>
+            </svg>
+            <p>Tu carrito está vacío</p>
+          </div>`;
+      } else {
+        container.innerHTML = Object.entries(cart).map(([id, qty]) => {
+          const item = menuItems.find(i => i.id == id);
+          if (!item) return "";
+          return `
+            <div class="cart-item">
+              <img class="cart-item-img" src="${item.img}" alt="${item.name}" onerror="this.src='https://placehold.co/60x60/f3f4f6/9ca3af?text=+'"/>
+              <div class="cart-item-info">
+                <div class="cart-item-name">${item.name}</div>
+                <div class="cart-item-price">${formatPrice(item.price * qty)}</div>
+                <div class="qty-controls">
+                  <button class="qty-btn" onclick="changeQty(${id}, -1)">−</button>
+                  <span class="qty-value">${qty}</span>
+                  <button class="qty-btn" onclick="changeQty(${id}, 1)">+</button>
+                </div>
+              </div>
+            </div>`;
+        }).join("");
+      }
+    }
+
+    function openCart() {
+      document.getElementById("overlay").classList.add("open");
+      document.getElementById("cartDrawer").classList.add("open");
+      document.body.style.overflow = "hidden";
+    }
+    function closeCart() {
+      document.getElementById("overlay").classList.remove("open");
+      document.getElementById("cartDrawer").classList.remove("open");
+      document.body.style.overflow = "";
+    }
+
+    let toastTimeout;
+    function showToast(msg) {
+      const toast = document.getElementById("toast");
+      toast.textContent = msg;
+      toast.classList.add("show");
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => toast.classList.remove("show"), 1800);
+    }
+
+    document.getElementById("cartIconBtn").addEventListener("click", openCart);
+    document.getElementById("checkoutBtn").addEventListener("click", openCart);
+    document.getElementById("closeCart").addEventListener("click", closeCart);
+    document.getElementById("overlay").addEventListener("click", closeCart);
+
+    document.getElementById("placeOrderBtn").addEventListener("click", () => {
+      if (Object.keys(cart).length === 0) return;
+      showToast("¡Pedido enviado! Te llamaremos 📞");
+      cart = {};
+      updateCartUI();
+      closeCart();
+    });
+
+    document.getElementById("categories").addEventListener("click", (e) => {
+      if (e.target.classList.contains("cat-btn")) {
+        document.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
+        e.target.classList.add("active");
+        currentCategory = e.target.dataset.cat;
+        renderMenu();
+      }
+    });
+
+    document.getElementById("searchInput").addEventListener("input", (e) => {
+      searchQuery = e.target.value.trim();
+      renderMenu();
+    });
+
+    // Admin: secret tap (tap 5 times bottom-left corner)
+    let secretTaps = 0;
+    let secretTimer = null;
+    document.getElementById("secretTap").addEventListener("click", () => {
+      secretTaps++;
+      clearTimeout(secretTimer);
+      if (secretTaps >= 5) {
+        secretTaps = 0;
+        openAdminLogin();
+      } else {
+        secretTimer = setTimeout(() => { secretTaps = 0; }, 2000);
+      }
+    });
+
+    // Enter key on PIN input
+    document.getElementById("adminPin").addEventListener("keydown", (e) => {
+      if (e.key === "Enter") tryAdminLogin();
+    });
+
+    renderMenu();
+    updateCartUI();
+  </script>
+</body>
+</html>
