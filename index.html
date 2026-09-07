@@ -525,12 +525,11 @@
       font-size: 0.76rem; font-weight: 700; color: var(--text); line-height: 1.25;
     }
     .allergy-videos {
-      margin-top: 18px; display: flex; gap: 10px; overflow-x: auto; padding-bottom: 6px;
-      -webkit-overflow-scrolling: touch; scroll-snap-type: x proximity;
+      margin-top: 18px; display: flex; justify-content: center; padding-bottom: 6px;
     }
     .allergy-videos video {
-      flex: 0 0 180px; width: 180px; aspect-ratio: 9 / 16; object-fit: cover;
-      border-radius: 12px; background: #111; border: 1px solid var(--border); scroll-snap-align: start;
+      flex: 0 1 360px; width: min(100%, 360px); max-width: 100%; aspect-ratio: 9 / 16; object-fit: cover;
+      border-radius: 12px; background: #111; border: 1px solid var(--border);
     }
     .admin-access-btn:active { background: var(--border); }
 
